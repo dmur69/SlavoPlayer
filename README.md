@@ -1,4 +1,4 @@
-# music
+# SlavoPlayer
 
 ## Project setup
 ```
