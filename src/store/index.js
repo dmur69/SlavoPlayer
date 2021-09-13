@@ -49,6 +49,13 @@ export default createStore({
     }
   },
   getters: {
+    currentTrackPosition: state => {
+      let pos = 0;
+      if (state.currentTrack.sound.playing) {
+        pos = state.currentTrack.sound.seek();
+      }
+      return pos;
+    },
     currentTrackCollection: state => state.currentTrackCollection,
     trackIsPlaying: state => {
       let playing = false;

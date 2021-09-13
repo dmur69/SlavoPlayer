@@ -69,6 +69,7 @@
 import AppTagToSelect from "@/components/track/TagToSelect.vue";
 import AppTagToDisplay from "@/components/track/TagToDisplay.vue";
 import TagHandler from "@/handlerobj/tag";
+import { mapGetters } from "vuex";
 
 /*
 Becomes trackKey as param
@@ -83,6 +84,7 @@ export default {
   components: { AppTagToSelect, AppTagToDisplay },
   data() {
     return {
+      savedTrackPosition: 0,
       tagSearchIsActive: false,
       allTags: []
     };
@@ -94,10 +96,15 @@ export default {
       required: true
     }
   },
+  computed: {
+    ...mapGetters(["currentTrackPosition"])
+  },
   methods: {
     // Toggle dropdown for adding new tags
     async toggleTagDropDown() {
       document.getElementById("tagsDropdown").classList.toggle("show");
+
+      this.savedTrackPosition = this.currentTrackPosition;
 
       // Load global tag list only on first click
       if (!this.tagSearchIsActive && !this.allTags[0]) {
@@ -143,9 +150,11 @@ export default {
     },
     addNewTag(tag) {
       console.log("addNewTag");
-      // this.track.tags.push(tag);
-      // console.log(this.track);
-      this.$emit("update-track-tags", tag);
+      const tagToAdd = tag;
+      console.log(tagToAdd);
+      tagToAdd.position = this.currentTrackPosition;
+      console.log(tagToAdd);
+      this.$emit("update-track-tags", tagToAdd);
     }
   }
 };
