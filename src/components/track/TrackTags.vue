@@ -52,13 +52,14 @@
             focus:border-black
             rounded
           "
-          @click="toggleTagDropDown"
+          @click="handleTagDropDownClick"
           >+</span
         >
         <app-tag-to-display
           v-for="tag in parentTrack.tags"
           :key="tag.tagKey"
           :tag="tag"
+          @tag-edit="handleOnTagClick"
         />
       </div>
     </div>
@@ -100,8 +101,12 @@ export default {
     ...mapGetters(["currentTrackPosition"])
   },
   methods: {
-    // Toggle dropdown for adding new tags
-    async toggleTagDropDown() {
+    // Toggles area to edit tags and performs other actions
+    handleOnTagClick() {
+      console.log("Toggling Tag edit");
+    },
+    // Toggles dropdown for adding new tags and performs other actions
+    async handleTagDropDownClick() {
       document.getElementById("tagsDropdown").classList.toggle("show");
 
       this.savedTrackPosition = this.currentTrackPosition;
@@ -154,7 +159,7 @@ export default {
       console.log(tagToAdd);
       tagToAdd.position = this.currentTrackPosition;
       console.log(tagToAdd);
-      this.$emit("update-track-tags", tagToAdd);
+      this.$emit("add-tag", tagToAdd);
     }
   }
 };

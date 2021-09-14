@@ -41,7 +41,8 @@
       </div>
     </section>
     <!-- Tag management area -->
-    <app-track-tags :parentTrack="track" @update-track-tags="updateTrackTags" />
+    <app-track-tags :parentTrack="track" @add-tag="addTag" />
+    <app-tag-edit-form :currentTag="currentTag" @remove-tag="removeTag" />
     <!-- Form for Comment can be used later for Notes-->
     <!-- Area below is still static mockup -->
     <section class="container mx-auto mt-6" id="comments">
@@ -129,6 +130,7 @@
 import TrackHandler from "@/handlerobj/track";
 import { mapActions, mapState, mapGetters } from "vuex";
 import AppTrackTags from "@/components/track/TrackTags.vue";
+import AppTagEditForm from "@/components/track/TagEditForm.vue";
 
 export default {
   name: "Track",
@@ -138,7 +140,7 @@ export default {
       currentTag: {}
     };
   },
-  components: { AppTrackTags },
+  components: { AppTrackTags, AppTagEditForm },
   computed: {
     ...mapGetters(["trackIsPlaying", "currentTrackCollection"]),
     // ...mapGetters(["getCurrentPlayingtrackKey"]),
@@ -158,13 +160,22 @@ export default {
     // toggle playing (if user stays on the same track)
     // or start new track on change
     ...mapActions(["tryPlayNextTrack", "setStartPosition"]),
-    updateTrackTags(newTag) {
+    addTag(newTag) {
       // Update UI
       this.track.tags.push(newTag);
       // Set as current tag
       this.currentTag = newTag;
       // Update in fsdb
       this.track.update(this.currentTrackCollection);
+    },
+    removeTag(tagToRemove) {
+      console.log("removing Tag");
+      console.log(tagToRemove);
+      // Update UI
+      // this.track.tags.push(newTag);
+      // tagToRemove;
+      // Update in fsdb
+      // this.track.update(this.currentTrackCollection);
     }
   },
   async created() {

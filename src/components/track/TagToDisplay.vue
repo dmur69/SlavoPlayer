@@ -12,6 +12,7 @@
       focus:border-black
       rounded
     "
+    @click.prevent="clickOnTagHandler"
   >
     {{ this.tag.displayName }}</span
   >
@@ -30,7 +31,7 @@ export default {
     clickOnTagHandler() {
       //   console.log(this.tag);
       // ToDo: später edit dialog für die Tags
-      this.$emit("tag-select", this.tag);
+      this.$emit("tag-edit", this.tag);
     }
   }
 };
