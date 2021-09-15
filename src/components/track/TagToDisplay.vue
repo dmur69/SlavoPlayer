@@ -5,13 +5,14 @@
       py-0.0
       px-3
       text-gray-800
-      border border-gray-300
       transition
       duration-500
       focus:outline-none
       focus:border-black
       rounded
+      border
     "
+    :class="isCurrentTag ? 'border-yellow-400' : 'border-gray-300'"
     @click.prevent="clickOnTagHandler"
   >
     {{ this.tag.displayName }}</span
@@ -25,6 +26,10 @@ export default {
     tag: {
       type: Object, // Tag object
       required: true
+    },
+    isCurrentTag: {
+      type: Boolean,
+      required: true
     }
   },
   methods: {
@@ -33,6 +38,10 @@ export default {
       // Let parent do handling
       this.$emit("tag-click", this.tag);
     }
+  },
+  async created() {
+    console.log("Tag to display created");
+    console.log(this.isCurrentTag);
   }
 };
 </script>

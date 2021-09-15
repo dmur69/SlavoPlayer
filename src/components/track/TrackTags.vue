@@ -59,6 +59,7 @@
           v-for="tag in parentTrack.tags"
           :key="tag.tagKey"
           :tag="tag"
+          :isCurrentTag="currentTagKey === tag.tagKey ? true : false"
           @tag-click="handleOnTagClick"
         />
       </div>
@@ -183,6 +184,14 @@ export default {
       console.log(tagToAdd);
       this.$emit("add-tag", tagToAdd);
     }
+  },
+  async created() {
+    console.log("TrackTags created");
+    console.log(this.currentTag);
+    if (this.$route.params.tag_id) {
+      this.currentTagKey = this.$route.params.tag_id;
+    }
+    console.log(this.currentTag);
   }
 };
 </script>

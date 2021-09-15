@@ -220,7 +220,7 @@ export default {
       // Set current tag
       this.currentTag = foundTag;
       console.log("// Set current tag");
-      console.log(this.currentTag);
+      console.log(this.currentTag.tagKey);
       this.showTagEditForm = true;
 
       // open this tag and set start position
