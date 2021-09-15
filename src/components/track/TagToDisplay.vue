@@ -29,9 +29,9 @@ export default {
   },
   methods: {
     clickOnTagHandler() {
-      //   console.log(this.tag);
-      // ToDo: später edit dialog für die Tags
-      this.$emit("tag-edit", this.tag);
+      // console.log(this.tag);
+      // Let parent do handling
+      this.$emit("tag-click", this.tag);
     }
   }
 };

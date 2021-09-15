@@ -59,7 +59,7 @@
           v-for="tag in parentTrack.tags"
           :key="tag.tagKey"
           :tag="tag"
-          @tag-edit="handleOnTagClick"
+          @tag-click="handleOnTagClick"
         />
       </div>
     </div>
@@ -87,7 +87,8 @@ export default {
     return {
       savedTrackPosition: 0,
       tagSearchIsActive: false,
-      allTags: []
+      allTags: [],
+      currentTagKey: ""
     };
   },
   props: {
@@ -101,9 +102,30 @@ export default {
     ...mapGetters(["currentTrackPosition"])
   },
   methods: {
-    // Toggles area to edit tags and performs other actions
-    handleOnTagClick() {
-      console.log("Toggling Tag edit");
+    // Opens area to edit tags and performs other actions
+    handleOnTagClick(clickedTag) {
+      console.log("handleOnTagClick(clickedTag)");
+
+      // NICHT jedes mal laden.
+      // console.log(this.currentTag);
+      // console.log(clickedTag);
+
+      // No action if tag edit form for clicked tag is already open
+      if (this.currentTagKey === clickedTag.tagKey) {
+        return;
+      }
+
+      // Change current tag and let parent now about it
+      this.currentTagKey = clickedTag.tagKey;
+      this.$emit("tag-click"); // Forward event to grand parent
+      // to evtl show tag edit form (initially closed)
+
+      // Loading matching TagEditForm via route call
+      console.log("Loading TagEditForm via route call");
+      this.$router.push({
+        name: "track_tag_link",
+        params: { id: this.parentTrack.trackKey, tag_id: clickedTag.tagKey }
+      });
     },
     // Toggles dropdown for adding new tags and performs other actions
     async handleTagDropDownClick() {

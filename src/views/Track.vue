@@ -41,8 +41,17 @@
       </div>
     </section>
     <!-- Tag management area -->
-    <app-track-tags :parentTrack="track" @add-tag="addTag" />
-    <app-tag-edit-form :currentTag="currentTag" @remove-tag="removeTag" />
+    <app-track-tags
+      :parentTrack="track"
+      @tag-click="this.showTagEditForm = true"
+      @add-tag="addTag"
+    />
+    <app-tag-edit-form
+      v-show="showTagEditForm"
+      :currentTag="currentTag"
+      @close-click="showTagEditForm = false"
+      @remove-tag="removeTag"
+    />
     <!-- Form for Comment can be used later for Notes-->
     <!-- Area below is still static mockup -->
     <section class="container mx-auto mt-6" id="comments">
@@ -128,6 +137,7 @@
 
 <script>
 import TrackHandler from "@/handlerobj/track";
+import TagHandler from "@/handlerobj/tag";
 import { mapActions, mapState, mapGetters } from "vuex";
 import AppTrackTags from "@/components/track/TrackTags.vue";
 import AppTagEditForm from "@/components/track/TagEditForm.vue";
@@ -136,8 +146,9 @@ export default {
   name: "Track",
   data() {
     return {
-      track: {},
-      currentTag: {}
+      track: new TrackHandler(),
+      currentTag: new TagHandler(),
+      showTagEditForm: false
     };
   },
   components: { AppTrackTags, AppTagEditForm },
@@ -183,30 +194,37 @@ export default {
       // Handle route calls
       const trackHandler = new TrackHandler(); // with empty param just handler
       // get certain track on key
-      this.track = await trackHandler.getOnKey(
+      const foundTrack = await trackHandler.getOnKey(
         this.currentTrackCollection,
         this.$route.params.id
       ); // Getter methods always return full TrackHanlder objects: with meta and methods
 
       // Nothing found => redirect to home
-      if (!this.track.trackKey) {
+      if (!foundTrack.trackKey) {
         console.log("Track not found!");
         this.$router.push({ name: "home" });
         return;
       }
 
-      // Get tag from route
-      const tagId = this.$route.params.tag_id;
-      this.currentTag = this.track.tags
-        ? this.track.tags.find((x) => x.tagKey === tagId)
+      // Set currentTrack
+      this.track = foundTrack;
+
+      // Get tag from route and search in TrackTags on it
+      const foundTag = this.track.tags
+        ? this.track.tags.find((x) => x.tagKey === this.$route.params.tag_id)
         : {};
 
       // Nothing found => do nothing
-      if (!this.currentTag) return;
+      if (!foundTag) return;
+
+      // Set current tag
+      this.currentTag = foundTag;
+      console.log("// Set current tag");
+      console.log(this.currentTag);
+      this.showTagEditForm = true;
 
       // open this tag and set start position
       // we cannot start playing on link-load because of browser restriction
-      console.log(this.currentTag.displayName);
       // ToDo: toggle ManageTag UI
       this.setStartPosition({
         seek: this.currentTag.position,

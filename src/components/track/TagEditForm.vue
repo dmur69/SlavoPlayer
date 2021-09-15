@@ -1,12 +1,18 @@
 <template>
-  <section class="container mx-auto mt-6" id="tagedit">
+  <section class="container mx-auto mt-6">
     <div class="bg-white rounded border border-gray-200 relative flex flex-col">
       <div class="px-6 pt-6 pb-5 font-bold border-b border-gray-200">
-        <!-- Comment Count -->
+        <!-- Tag Edit form -->
         <span class="card-title"
           >Current tag: {{ this.currentTag.displayName }}</span
         >
-        <i class="fa fa-comments float-right text-green-400 text-2xl"></i>
+        <!-- Close Button -->
+        <div
+          class="modal-close cursor-pointer z-50 float-right"
+          @click.prevent="clickOnClose"
+        >
+          <i class="fas fa-times" />
+        </div>
       </div>
       <div class="p-6">
         <textarea
@@ -50,7 +56,15 @@ export default {
     clickOnRemove() {
       console.log("clickOnRemove");
       this.$emit("tag-remove", this.currentTag);
+    },
+    clickOnClose() {
+      console.log("clickOnClose");
+      this.$emit("close-click");
     }
+  },
+  created() {
+    console.log("created()");
+    console.log(this.currentTag);
   }
 };
 </script>

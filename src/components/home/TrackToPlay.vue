@@ -19,15 +19,9 @@
       >
         {{ this.track.title }}
       </router-link>
-      <router-link
-        :to="{
-          name: 'track_tag_link',
-          params: { id: track.trackKey, tag_id: tag.tagKey }
-        }"
-        class="font-bold block text-gray-600 tst-track-name"
-      >
+      <div class="font-bold block text-gray-600 tst-track-name">
         <span class="text-gray-500 text-sm">{{ this.track.length }}</span>
-      </router-link>
+      </div>
     </div>
     <div class="text-gray-600 text-lg">
       <router-link
@@ -53,10 +47,6 @@ export default {
   name: "TrackToPlay",
   props: {
     track: {
-      type: Object,
-      required: true
-    },
-    tag: {
       type: Object,
       required: true
     }

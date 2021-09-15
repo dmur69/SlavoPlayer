@@ -42,7 +42,6 @@
             v-for="track in userTracksList"
             :key="track.trackKey"
             :track="track"
-            :tag="dummyTag"
           />
         </ol>
         <!-- .. end Playlist -->
@@ -64,8 +63,7 @@ export default {
   data() {
     return {
       userTracksList: [],
-      maxTracksPerPage: 2,
-      dummyTag: { tagKey: "test tag" }
+      maxTracksPerPage: 2
     };
   },
   computed: {
