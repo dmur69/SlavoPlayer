@@ -50,7 +50,7 @@
       v-show="showTagEditForm"
       :currentTag="currentTag"
       @close-click="showTagEditForm = false"
-      @remove-tag="removeTag"
+      @tag-remove="removeTag"
     />
     <!-- Form for Comment can be used later for Notes-->
     <!-- Area below is still static mockup -->
@@ -179,14 +179,23 @@ export default {
       // Update in fsdb
       this.track.update(this.currentTrackCollection);
     },
-    removeTag(tagToRemove) {
+    async removeTag(tagToRemove) {
       console.log("removing Tag");
       console.log(tagToRemove);
       // Update UI
-      // this.track.tags.push(newTag);
-      // tagToRemove;
+      const arrayId = this.track.tags.findIndex(
+        (tag) => tag.tagKey === tagToRemove.tagKey
+      );
+      if (arrayId > -1) {
+        this.track.tags.splice(arrayId, 1);
+      }
       // Update in fsdb
-      // this.track.update(this.currentTrackCollection);
+      await this.track.update(this.currentTrackCollection);
+      // Redirect to track page without tag ui after successful update
+      this.$router.push({
+        name: "track",
+        params: { id: this.track.trackKey }
+      });
     }
   },
   async created() {
@@ -225,7 +234,6 @@ export default {
 
       // open this tag and set start position
       // we cannot start playing on link-load because of browser restriction
-      // ToDo: toggle ManageTag UI
       this.setStartPosition({
         seek: this.currentTag.position,
         duration: this.track.length

@@ -83,7 +83,6 @@ export default {
       const arrayId = this.userTracksList.findIndex(
         (x) => x.trackKey === trackToRemoveId
       );
-      console.log(arrayId);
       this.userTracksList.splice(arrayId, 1); // array function to remove n elements
     },
     // Used for avoiding lost of data in the B
