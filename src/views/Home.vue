@@ -63,7 +63,7 @@ export default {
   data() {
     return {
       userTracksList: [],
-      maxTracksPerPage: 2
+      maxTracksPerPage: 10
     };
   },
   computed: {

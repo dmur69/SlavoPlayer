@@ -4,7 +4,7 @@
       <span class="card-title">Upload</span>
       <i
         class="fas fa-upload float-right text-green-400 text-2xl"
-        @click="savePlaylist"
+        @click="savePlaylistFromJson"
       ></i>
     </div>
     <div class="p-6">
@@ -62,6 +62,7 @@
 <script>
 import { mapGetters } from "vuex";
 import azbyka from "@/fakedata/azbyka-tracks";
+import tom1Json from "@/fakedata/tom1.json";
 import TrackHandler from "@/handlerobj/track";
 import { storage, auth, tracks } from "@/datamappers/firebase/firebase";
 
@@ -159,8 +160,18 @@ export default {
       });
     },
     // Manages audio file upload / called on button click
-    savePlaylist() {
+    savePlaylistFakeData() {
       azbyka.defaultPlaylist().forEach((item) => {
+        const trackHandler = new TrackHandler(item); // Create with track meta data
+        trackHandler.save(this.currentTrackCollection); // Tries to save this track meta to db
+        // TrackHandler has to know collection z.B "philokalia" save in
+      });
+    },
+    savePlaylistFromJson() {
+      // const trackHandler = new TrackHandler(tom1Json[3]); // Create with track meta data
+      // trackHandler.save("tom1"); // Tries to save this track meta to db
+
+      tom1Json.forEach((item) => {
         const trackHandler = new TrackHandler(item); // Create with track meta data
         trackHandler.save(this.currentTrackCollection); // Tries to save this track meta to db
         // TrackHandler has to know collection z.B "philokalia" save in
