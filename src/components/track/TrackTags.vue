@@ -107,22 +107,17 @@ export default {
     handleOnTagClick(clickedTag) {
       console.log("handleOnTagClick(clickedTag)");
 
-      // NICHT jedes mal laden.
-      // console.log(this.currentTag);
-      // console.log(clickedTag);
+      this.$emit("tag-click"); // Forward event to grand parent
+      // to evtl show tag edit form (initially closed)
 
       // No action if tag edit form for clicked tag is already open
       if (this.currentTagKey === clickedTag.tagKey) {
         return;
       }
 
-      // Change current tag and let parent now about it
+      // Change current tag
       this.currentTagKey = clickedTag.tagKey;
-      this.$emit("tag-click"); // Forward event to grand parent
-      // to evtl show tag edit form (initially closed)
-
-      // Loading matching TagEditForm via route call
-      //
+      // and load matching TagEditForm via route call
       console.log("Loading TagEditForm via route call");
       this.$router.push({
         name: "track_tag_link",
@@ -187,7 +182,7 @@ export default {
     }
   },
   async created() {
-    console.log("TrackTags created");
+    console.log("TrackTags vue created");
     console.log(this.currentTag);
     if (this.$route.params.tag_id) {
       this.currentTagKey = this.$route.params.tag_id;

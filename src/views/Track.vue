@@ -33,10 +33,15 @@
         </button>
         <div class="z-50 text-left ml-8">
           <!-- Song Info -->
-          <div class="text-3xl font-bold">
-            {{ this.track.title }}
+          <div class="text-xl font-bold">
+            {{ this.track.bookTitle }} | {{ this.track.subtitle }}
           </div>
-          <div>{{ track.genre }}</div>
+          <div class="text-xl font-bold">
+            {{ this.track.author }}
+          </div>
+          <div class="text-2xl font-bold">
+            Глава {{ this.track.chapter }}: {{ this.track.title }}
+          </div>
         </div>
       </div>
     </section>
@@ -176,8 +181,11 @@ export default {
       this.track.tags.push(newTag);
       // Set as current tag
       this.currentTag = newTag;
-      // Update in fsdb
+      // Update in db
       this.track.update(this.currentTrackCollection);
+      // ToDo: create and save Bookmark
+      // Author: TrackTitle (BookTitle, SubTitle, Chapter)
+      // All new tags will be automatically bookmarked
     },
     async removeTag(tagToRemove) {
       console.log("removing Tag");
@@ -189,6 +197,10 @@ export default {
       if (arrayId > -1) {
         this.track.tags.splice(arrayId, 1);
       }
+      // ToDo: if tagToRemove.isBookmarked => remove Bookmark
+      // TagBookmarkKey (also id in DB) will be trackKey+Tagkey => simple to find
+      // ToDo: user can also remove tag bookmark without removing tag
+
       // Update in fsdb
       await this.track.update(this.currentTrackCollection);
       // Redirect to track page without tag ui after successful update

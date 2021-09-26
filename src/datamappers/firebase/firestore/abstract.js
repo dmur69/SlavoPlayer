@@ -28,6 +28,7 @@ class AbstractkMapper {
         .set(this.objectToSave);
       console.log("Created new document in firestore.");
     } catch (error) {
+      console.log(this);
       console.log(
         `Unexpected error on saving track meta... Error message: ${error.message}`
       );

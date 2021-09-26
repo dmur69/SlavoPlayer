@@ -4,7 +4,7 @@
       <div class="px-6 pt-6 pb-5 font-bold border-b border-gray-200">
         <!-- Tag Edit form -->
         <span class="card-title"
-          >Current tag: {{ this.currentTag.displayName }}</span
+          >Выбранный тег: {{ this.currentTag.displayName }}</span
         >
         <!-- Close Button -->
         <div
@@ -13,9 +13,17 @@
         >
           <i class="fas fa-times" />
         </div>
+        <div class="pt-3" @click.prevent="clickOnToggleMode">
+          <!-- Tag/Bookmark mode switch -->
+          <i class="cursor-pointer fas fa-star pr-4 text-yellow-300" />
+          <span class="card-title"
+            >Mode: {{ this.currentTag.displayName }}</span
+          >
+        </div>
       </div>
       <div class="p-6">
         <textarea
+          rows="3"
           class="
             block
             w-full
@@ -30,11 +38,13 @@
             rounded
             mb-4
           "
-          placeholder="Add your note to this tag here..."
+          placeholder="В режиме закладки тег запоминает актульную позицию звуковой дорожки
+и отображается в Вашем центральном списке закладок. Нажмите на символ чтобы удалить эту
+дополнительную информацию."
         ></textarea>
         <button
           class="py-1.5 px-3 rounded text-white bg-green-600 block"
-          @click.prevent="clickOnRemove"
+          @click.prevent="clickOnRemoveTag"
         >
           Remove
         </button>
@@ -53,9 +63,13 @@ export default {
     }
   },
   methods: {
-    clickOnRemove() {
-      console.log("clickOnRemove");
+    clickOnRemoveTag() {
+      console.log("clickOnRemoveTag");
       this.$emit("tag-remove", this.currentTag);
+    },
+    clickOnToggleMode() {
+      console.log("clickOnToggleMode");
+      // this.$emit("tag-remove", this.currentTag);
     },
     clickOnClose() {
       console.log("clickOnClose");

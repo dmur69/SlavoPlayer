@@ -7,8 +7,9 @@ class TagHandler {
     this.displayName = tag;
     this.tagKey = this.generateKeyFromTitle(tag);
     this.sysTag = true;
-    this.position = 0;
     this.tagMapper = new TagMapper(this.getMeta(), "tags");
+    this.isBookmarked = true;
+    this.position = 0;
   }
 
   // DisplayName should be unique for any tag
@@ -27,6 +28,7 @@ class TagHandler {
       tagKey: this.tagKey,
       displayName: this.displayName,
       sysTag: this.sysTag,
+      isBookmarked: this.isBookmarked,
       position: this.position
     };
   }

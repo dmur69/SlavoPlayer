@@ -62,7 +62,8 @@
 <script>
 import { mapGetters } from "vuex";
 import azbyka from "@/fakedata/azbyka-tracks";
-import tom1Json from "@/fakedata/tom1.json";
+import trackImportSource from "@/fakedata/dobrotoljubie-tom-5.json";
+// import trackImportSource from "@/fakedata/tomX???.json";
 import TrackHandler from "@/handlerobj/track";
 import { storage, auth, tracks } from "@/datamappers/firebase/firebase";
 
@@ -168,10 +169,10 @@ export default {
       });
     },
     savePlaylistFromJson() {
-      // const trackHandler = new TrackHandler(tom1Json[3]); // Create with track meta data
+      // const trackHandler = new TrackHandler(trackImportSource[3]); // Create with track meta data
       // trackHandler.save("tom1"); // Tries to save this track meta to db
 
-      tom1Json.forEach((item) => {
+      trackImportSource.forEach((item) => {
         const trackHandler = new TrackHandler(item); // Create with track meta data
         trackHandler.save(this.currentTrackCollection); // Tries to save this track meta to db
         // TrackHandler has to know collection z.B "philokalia" save in

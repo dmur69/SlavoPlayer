@@ -3,7 +3,7 @@ import AbstractkMapper from "./abstract";
 class TrackMapper {
   constructor(collection, track) {
     console.log("TrackManager constructor");
-    console.log(collection);
+    console.log(track);
     // ToDo:
     // if(!collection) this.collectionName = bookKey else
     this.collectionName = collection;

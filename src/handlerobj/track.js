@@ -6,22 +6,35 @@ class TrackHandler {
   constructor(tr) {
     console.log("Entering constructor");
     if (tr) {
+      // See getMeta for details:
       this.trackKey = tr.trackKey;
-      this.nr = tr.nr;
+      this.bookKey = tr.bookKey;
+      this.bookTitle = tr.bookTitle;
+      this.author = tr.author;
+      this.subtitle = tr.subtitle;
       this.title = tr.title;
+      this.initialTitle = tr.initialTitle;
+      this.chapter = tr.chapter;
+      this.nr = tr.nr;
       this.url = tr.url;
       this.length = tr.length;
       this.tags = tr.tags;
-      this.searchKeywords = []; // ToDo:
-      this.bookKey = tr.bookKey;
+      this.searchKeywords = [];
     } else {
       this.trackKey = "";
+      this.bookKey = "";
+      this.bookTitle = "";
+      this.author = "";
+      this.subtitle = "";
+      this.title = "";
+      this.initialTitle = "";
+      this.chapter = "";
       this.nr = 0;
-      this.title = "No title jet";
       this.url = "";
       this.length = 0;
-      this.tags = []; // Array of Tags
-      this.searchKeywords = []; // Array of Stings
+      this.tags = [];
+      this.searchKeywords = [];
+
       // ToDo: implement update on adding removing tags
       // Perfect to use with fbdb functions:
       // const col = firestore.collection('carts');
@@ -37,7 +50,6 @@ class TrackHandler {
       // doc.update({
       //   items: arrayUnion('coco puffs')
       // });
-      this.bookKey = "";
     }
     console.log("Track object created");
   }
@@ -45,14 +57,20 @@ class TrackHandler {
   // Track's getMeta also returns Arrays directly
   getMeta() {
     return {
-      trackKey: this.trackKey,
-      nr: this.nr,
-      title: this.title,
-      url: this.url,
-      length: this.length,
-      tags: this.tags,
-      searchKeywords: this.searchKeywords,
-      bookKey: this.bookKey
+      trackKey: this.trackKey, // mp3 file name without file extention
+      bookKey: this.bookKey, // e.g. "dobrotoljubie-tom-5";=>
+      // web page file name without html extention
+      bookTitle: this.bookTitle, // Z.B. Dobrotoljubie
+      author: this.author, // parsed or manually set autor:book => n:1
+      subtitle: this.subtitle, // Z.B. Tom 3
+      title: this.title, // Parsed to pure title
+      initialTitle: this.initialTitle, // full (unparsed) title containing Auhor and Chapter
+      chapter: this.chapter, // chapter not always matches the title
+      url: this.url, // url to mp3 file
+      length: this.length, // parsed track length
+      nr: this.nr, // Track order number in azbyka player
+      tags: this.tags, // Array of Tags
+      searchKeywords: this.searchKeywords // Array of Strings
     };
   }
 
