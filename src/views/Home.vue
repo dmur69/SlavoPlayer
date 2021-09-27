@@ -81,19 +81,20 @@ export default {
           const { trackKey } =
             this.userTracksList[this.userTracksList.length - 1];
           console.log(trackKey);
-          tracksMetaArray = await trackHandler.get(
-            collectionName,
-            this.maxTracksPerPage,
-            trackKey
-          ); // called with this 3 params gets next portion of tracks for infinite scroll
+          tracksMetaArray = await trackHandler.get({
+            source: collectionName,
+            numberOfItems: this.maxTracksPerPage,
+            startAfterKey: trackKey,
+            sortOnColumn: "trackKey"
+          }); // called with this 3 params gets next portion of tracks for infinite scroll
         } else {
-          console.log("Home1");
-          tracksMetaArray = await trackHandler.get(
-            collectionName,
-            this.maxTracksPerPage
-          ); // called with only 2 params gets first portion of tracks for infinite scroll
+          console.log("Home1 - get first portion");
+          tracksMetaArray = await trackHandler.get({
+            source: collectionName,
+            numberOfItems: this.maxTracksPerPage,
+            sortOnColumn: "trackKey"
+          }); // called with only 2 params gets first portion of tracks for infinite scroll
           // ... starts from the beginning
-          console.log("Home2");
         }
         console.log(tracksMetaArray);
         tracksMetaArray.forEach((trackMeta) => {

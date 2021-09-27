@@ -41,8 +41,8 @@ class TagHandler {
   // Get methods
   // to get all: do not set any params
   // to start from beginning: set only first param
-  async get(numberOfTags, startAfterKey) {
-    const tags = await this.tagMapper.get(numberOfTags, startAfterKey);
+  async get(params) {
+    const tags = await this.tagMapper.get(params);
     return tags;
   }
 }

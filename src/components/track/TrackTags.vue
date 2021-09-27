@@ -133,7 +133,7 @@ export default {
       // Load global tag list only on first click
       if (!this.tagSearchIsActive && !this.allTags[0]) {
         const tagHandler = new TagHandler(); // Without params just handler with no meta
-        this.allTags = await tagHandler.get(); // Without params gets all
+        this.allTags = await tagHandler.get({ sortOnColumn: "title" }); // Without params gets all
         console.log("Global tag list loaded:");
         this.allTags.forEach((tag) => {
           console.log(tag.displayName);

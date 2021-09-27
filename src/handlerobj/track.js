@@ -93,16 +93,15 @@ class TrackHandler {
   // to get all: set only source param
   // to start from beginning: set also numberOfTracks param
   // eslint-disable-next-line class-methods-use-this
-  async get(source, numberOfTracks, startAfterKey) {
+  async get(params) {
     console.log("get() from Track");
-    const trackMapper = new TrackMapper(source);
-    console.log("Track1");
-    const tracksMeta = await trackMapper.get(numberOfTracks, startAfterKey);
+    const trackMapper = new TrackMapper(params.source);
+    console.log(params);
+    const tracksMeta = await trackMapper.get(params);
     const tracksArray = [];
     tracksMeta.forEach(trackMeta => {
       tracksArray.push(new TrackHandler(trackMeta));
     });
-    console.log("Track2");
     return tracksArray;
   }
 

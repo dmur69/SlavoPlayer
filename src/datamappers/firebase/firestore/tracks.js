@@ -27,22 +27,16 @@ class TrackMapper {
 
   // Get methods
   // return back entity objects, caller can deal with
-  async get(numberOfDocs, startAfterKey) {
+  async get(params) {
     console.log("get() from TrackMapper");
-    console.log("TrackMapper1");
-    const tracks = await this.abstactMapper.getDocs(
-      numberOfDocs,
-      startAfterKey
-    );
-    console.log("TrackMapper2");
+    console.log(params);
+    const tracks = await this.abstactMapper.getDocs(params);
     return tracks;
   }
 
   async getOnKey(key) {
     console.log("get() from TrackMapper");
-    console.log("TrackMapper1");
     const track = await this.abstactMapper.getDoc(key);
-    console.log("TrackMapper2");
     return track;
   }
 }
