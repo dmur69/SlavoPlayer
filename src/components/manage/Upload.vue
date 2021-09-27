@@ -150,7 +150,7 @@ export default {
               // ///////////////////////////////////
               // Our TRACK or TrackList object ToDo: separate model
               const trackListItem = {
-                arrayId: "track_added",
+                // arrayId: "track_added", // ToDo: has to redisigned, when we need Upload at all
                 trackKey: trackDocSnapshot.id,
                 ...trackDocSnapshot.data()
               };

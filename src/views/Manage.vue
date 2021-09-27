@@ -68,9 +68,9 @@ export default {
       const trackListItem = trackItemToAdd;
       // On call from Upload.vue - track was just added
       // we need to set arrayId
-      if (trackListItem.arrayId === "track_added") {
-        trackListItem.arrayId = this.userTracksList.length;
-      }
+      // if (trackListItem.arrayId === "track_added") {
+      //   trackListItem.arrayId = this.userTracksList.length;
+      // }
       console.log(trackItemToAdd);
       this.userTracksList.push(trackListItem);
     },
@@ -119,16 +119,16 @@ export default {
       .where("user_uid", "==", auth.currentUser.uid)
       .get();
 
-    let i = 0;
+    // let i = 0;
     tracksDocSnapshots.forEach((trackDocSnapshot) => {
       // ///////////////////////////////////
-      // Our TRACK or TrackList object ToDo: separate model
+      // Our TRACK or TrackList object
       const trackListItem = {
-        arrayId: i,
+        // arrayId: i,
         ...trackDocSnapshot.data()
       };
       this.addTrackToList(trackListItem);
-      i += 1;
+      // i += 1;
     });
   }
 };
