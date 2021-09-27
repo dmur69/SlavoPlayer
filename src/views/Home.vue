@@ -31,11 +31,10 @@
       <div
         class="bg-white rounded border border-gray-200 relative flex flex-col"
       >
-        <div class="px-6 pt-6 pb-5 font-bold border-b border-gray-200">
-          <span class="card-title">{{ $t("home.tracks") }}</span>
-          <!-- Icon -->
+        <!-- <div class="px-6 pt-6 pb-5 font-bold border-b border-gray-200">
+          <span class="card-title">{{ userTracksList[5].bookTitle }}</span>
           <i class="fa fa-headphones-alt float-right text-green-400 text-xl" />
-        </div>
+        </div> -->
         <!-- Playlist -->
         <ol id="playlist">
           <app-track-to-play
@@ -63,7 +62,7 @@ export default {
   data() {
     return {
       userTracksList: [],
-      maxTracksPerPage: 10
+      maxTracksPerPage: 30
     };
   },
   computed: {
@@ -75,6 +74,9 @@ export default {
       let tracksMetaArray = [];
       try {
         const trackHandler = new TrackHandler(); // Create just handler object
+        console.log(
+          `this.userTracksList.length: ${this.userTracksList.length}`
+        );
         if (this.userTracksList.length) {
           const { trackKey } =
             this.userTracksList[this.userTracksList.length - 1];
@@ -94,18 +96,13 @@ export default {
           console.log("Home2");
         }
         console.log(tracksMetaArray);
-        let i = 0;
         tracksMetaArray.forEach((trackMeta) => {
           const trackArrayItem = new TrackHandler({
             ...trackMeta
-          }); // creates full objects (with helper functions) // ToDo: is it needed hier? Check!
-          trackArrayItem.arrayId = i; // to TrackArrayItem object
-          // ToDo: get rid of storing ArrayId in array itself
-
-          this.addTrackToList(trackArrayItem);
-          i += 1;
+          });
+          this.userTracksList.push(trackArrayItem);
           console.log("trackArrayItem added.");
-          console.log(trackArrayItem);
+          // console.log(trackArrayItem);
         });
       } catch (error) {
         console.log(
@@ -115,34 +112,27 @@ export default {
     },
     // ///// Handler methods
     handleTrackListScroll() {
+      // console.log("Entering handleTrackListScroll...");
       // Destructure browser windows & documentElement objects
       // for tracking current scroll pos
       const { innerHeight } = window;
       const { scrollTop, offsetHeight } = document.documentElement;
       // bottomOfWindow indicates the need for getting new portion of tracks
+      const left = Math.round(scrollTop) + innerHeight;
+      const right = offsetHeight;
+      console.log(`left: ${left} right: ${right}`);
       const bottomOfWindow =
-        Math.round(scrollTop) + innerHeight === offsetHeight;
+        Math.round(scrollTop) + innerHeight > offsetHeight - 5; // ToDo: why - 1 now necessary?
       if (bottomOfWindow) {
         console.log(
           "Bottom of page reached! Geting max number of tracks from firebase..."
         );
         this.getTracks(this.currentTrackCollection);
       }
-    },
-    // /////Helper methods
-    addTrackToList(trackItemToAdd) {
-      const trackListItem = trackItemToAdd;
-      // ToDo: get rid of this sick logic
-      // On call from Upload.vue - track was just added
-      // we need to set arrayId
-      if (trackListItem.arrayId === "track_added") {
-        trackListItem.arrayId = this.userTracksList.length;
-      }
-      this.userTracksList.push(trackListItem);
     }
   },
   // ///// Global vue life cycle functions
-  // Used for quering firebase for user track list
+  // Used for quering database for user track list
   async created() {
     this.getTracks(this.currentTrackCollection);
     window.addEventListener("scroll", this.handleTrackListScroll);

@@ -4,7 +4,7 @@
       flex
       justify-between
       items-center
-      p-3
+      p-2
       pl-6
       cursor-pointer
       transition
@@ -17,13 +17,14 @@
         :to="{ name: 'track', params: { id: track.trackKey } }"
         class="font-bold block text-gray-600 tst-track-name"
       >
-        {{ this.track.title }}
+        Глава {{ this.track.chapter }}: {{ this.track.title }} |
+        {{ this.track.author }}
+        <span class="text-gray-500 text-sm"
+          >({{ this.track.length }} | {{ this.track.nr }})</span
+        >
       </router-link>
-      <div class="font-bold block text-gray-600 tst-track-name">
-        <span class="text-gray-500 text-sm">{{ this.track.length }}</span>
-      </div>
     </div>
-    <div class="text-gray-600 text-lg">
+    <!-- <div class="text-gray-600 text-lg">
       <router-link
         custom
         :to="{
@@ -38,7 +39,7 @@
           {{ this.track.comment_count }}
         </span>
       </router-link>
-    </div>
+    </div> -->
   </li>
 </template>
 

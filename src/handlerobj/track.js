@@ -51,7 +51,6 @@ class TrackHandler {
       //   items: arrayUnion('coco puffs')
       // });
     }
-    console.log("Track object created");
   }
 
   // Track's getMeta also returns Arrays directly
