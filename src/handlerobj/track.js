@@ -57,8 +57,7 @@ class TrackHandler {
   getMeta() {
     return {
       trackKey: this.trackKey, // mp3 file name without file extention
-      bookKey: this.bookKey, // e.g. "dobrotoljubie-tom-5";=>
-      // web page file name without html extention
+      bookKey: this.bookKey, // set the same with collection (db table in common case) name
       bookTitle: this.bookTitle, // Z.B. Dobrotoljubie
       author: this.author, // parsed or manually set autor:book => n:1
       subtitle: this.subtitle, // Z.B. Tom 3

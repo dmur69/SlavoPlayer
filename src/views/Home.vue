@@ -35,111 +35,57 @@
           <span class="card-title">{{ userTracksList[5].bookTitle }}</span>
           <i class="fa fa-headphones-alt float-right text-green-400 text-xl" />
         </div> -->
-        <!-- Playlist -->
-        <ol id="playlist">
-          <app-track-to-play
-            v-for="track in userTracksList"
-            :key="track.trackKey"
-            :track="track"
+        <ol id="booklist">
+          <app-book-to-play
+            v-for="book in booksArray"
+            :key="book.bookKey"
+            :book="book"
           />
         </ol>
-        <!-- .. end Playlist -->
       </div>
     </section>
   </div>
 </template>
 
 <script>
-import TrackHandler from "@/handlerobj/track";
-import { mapGetters } from "vuex";
-import AppTrackToPlay from "../components/home/TrackToPlay.vue";
+import BookHandler from "@/handlerobj/book";
+// import { mapGetters } from "vuex";
+import AppBookToPlay from "../components/home/BookToPlay.vue";
 
 export default {
   name: "Home",
   components: {
-    AppTrackToPlay
+    AppBookToPlay
   },
   data() {
     return {
-      userTracksList: [],
-      maxTracksPerPage: 30
+      booksArray: []
     };
   },
   computed: {
-    ...mapGetters(["currentTrackCollection"])
-  },
-  methods: {
-    // ///// Function called on certain scroll position to infinite scroll on tracks
-    async getTracks(collectionName) {
-      let tracksMetaArray = [];
-      try {
-        const trackHandler = new TrackHandler(); // Create just handler object
-        console.log(
-          `this.userTracksList.length: ${this.userTracksList.length}`
-        );
-        if (this.userTracksList.length) {
-          const { trackKey } =
-            this.userTracksList[this.userTracksList.length - 1];
-          console.log(trackKey);
-          tracksMetaArray = await trackHandler.get({
-            source: collectionName,
-            numberOfItems: this.maxTracksPerPage,
-            startAfterKey: trackKey,
-            sortOnColumn: "trackKey"
-          }); // called with this 3 params gets next portion of tracks for infinite scroll
-        } else {
-          console.log("Home1 - get first portion");
-          tracksMetaArray = await trackHandler.get({
-            source: collectionName,
-            numberOfItems: this.maxTracksPerPage,
-            sortOnColumn: "trackKey"
-          }); // called with only 2 params gets first portion of tracks for infinite scroll
-          // ... starts from the beginning
-        }
-        console.log(tracksMetaArray);
-        tracksMetaArray.forEach((trackMeta) => {
-          const trackArrayItem = new TrackHandler({
-            ...trackMeta
-          });
-          this.userTracksList.push(trackArrayItem);
-          console.log("trackArrayItem added.");
-          // console.log(trackArrayItem);
-        });
-      } catch (error) {
-        console.log(
-          `Error while quering tracks from database: ${error.message}`
-        );
-      }
-    },
-    // ///// Handler methods
-    handleTrackListScroll() {
-      // console.log("Entering handleTrackListScroll...");
-      // Destructure browser windows & documentElement objects
-      // for tracking current scroll pos
-      const { innerHeight } = window;
-      const { scrollTop, offsetHeight } = document.documentElement;
-      // bottomOfWindow indicates the need for getting new portion of tracks
-      const left = Math.round(scrollTop) + innerHeight;
-      const right = offsetHeight;
-      console.log(`left: ${left} right: ${right}`);
-      const bottomOfWindow =
-        Math.round(scrollTop) + innerHeight > offsetHeight - 5; // ToDo: why - 1 now necessary?
-      if (bottomOfWindow) {
-        console.log(
-          "Bottom of page reached! Geting max number of tracks from firebase..."
-        );
-        this.getTracks(this.currentTrackCollection);
-      }
-    }
+    // ...mapGetters(["currentTrackCollection"])
   },
   // ///// Global vue life cycle functions
-  // Used for quering database for user track list
+  // Used for quering database for user book list
   async created() {
-    this.getTracks(this.currentTrackCollection);
-    window.addEventListener("scroll", this.handleTrackListScroll);
-  },
-  beforeUnmount() {
-    window.removeEventListener("scroll", this.handleTrackListScroll);
+    let booksMetaArray = [];
+    try {
+      const bookHandler = new BookHandler(); // Create just handler object
+      console.log("Home1 - get books");
+      booksMetaArray = await bookHandler.get({
+        source: "books",
+        sortOnColumn: "title"
+      }); // called with only 2 params gets first portion of tracks for infinite scroll
+      // ... starts from the beginning
+      console.log(booksMetaArray);
+      booksMetaArray.forEach((bookMeta) => {
+        this.booksArray.push(bookMeta);
+        console.log("bookArrayItem added.");
+        // console.log(bookMeta);
+      });
+    } catch (error) {
+      console.log(`Error while quering tracks from database: ${error.message}`);
+    }
   }
 };
 </script>

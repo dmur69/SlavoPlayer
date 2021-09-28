@@ -63,7 +63,6 @@ class AbstractkMapper {
     } else {
       await this.findAll(params);
     }
-    console.log("getDocs() in abstract2");
     return this.docsArray;
   }
 
