@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+// import { mapGetters } from "vuex";
 import azbyka from "@/fakedata/azbyka-tracks";
 import trackImportSource from "@/fakedata/dobrotoljubie-tom-5.json";
 // import trackImportSource from "@/fakedata/tomX???.json";
@@ -71,12 +71,10 @@ export default {
   name: "Upload",
   data() {
     return {
+      destinationCollection: "philokalia",
       is_dragover: false,
       uploads: []
     };
-  },
-  computed: {
-    ...mapGetters(["currentTrackCollection"])
   },
   methods: {
     // Manages audio file upload / called on event
@@ -164,17 +162,14 @@ export default {
     savePlaylistFakeData() {
       azbyka.defaultPlaylist().forEach((item) => {
         const trackHandler = new TrackHandler(item); // Create with track meta data
-        trackHandler.save(this.currentTrackCollection); // Tries to save this track meta to db
+        trackHandler.save(this.destinationCollection); // Tries to save this track meta to db
         // TrackHandler has to know collection z.B "philokalia" save in
       });
     },
     savePlaylistFromJson() {
-      // const trackHandler = new TrackHandler(trackImportSource[3]); // Create with track meta data
-      // trackHandler.save("tom1"); // Tries to save this track meta to db
-
       trackImportSource.forEach((item) => {
         const trackHandler = new TrackHandler(item); // Create with track meta data
-        trackHandler.save(this.currentTrackCollection); // Tries to save this track meta to db
+        trackHandler.save(this.destinationCollection); // Tries to save this track meta to db
         // TrackHandler has to know collection z.B "philokalia" save in
       });
     },

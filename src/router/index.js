@@ -13,21 +13,26 @@ const routes = [
     path: "/",
     component: Home
   },
+  /* **** Routes for working with main Entities via direct url calls **** */
   {
     name: "book",
-    path: "/book/:id",
-    component: Book
+    path: "/book/:book_id",
+    component: Book,
+    props: true // attention! can only be passed on programmatic call
+    // on direct url call "path" remains the only way to pass data
+    // => also see comments in definition of params(!) in BookToPlay & Book modules
   },
   {
     name: "track",
-    path: "/track/:id",
+    path: "/book/:book_id/track/:track_id",
     component: Track
   },
   {
     name: "track_tag_link",
-    path: "/track/:id/tag/:tag_id",
+    path: "/book/:book_id/track/:track_id/tag/:tag_id",
     component: Track
   },
+  /* **** END: Routes for working with main Entities via direct url calls **** */
   {
     name: "manage",
     // alias: "/manage", // do not redirect!

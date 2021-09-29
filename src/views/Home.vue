@@ -9,14 +9,18 @@
       <div class="container mx-auto">
         <div class="text-white main-header-content">
           <h1 class="font-bold text-3xl mb-5">
-            "Вникай в себя и в учение; занимайся сим постоянно..." 1Тим.4,16
+            "Вникай в себя и в учение; занимайся сим постоянно..." 1.Тим.4,16
           </h1>
           <p class="w-full md:w-8/12 mx-auto">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus
-            et dolor mollis, congue augue non, venenatis elit. Nunc justo eros,
-            suscipit ac aliquet imperdiet, venenatis et sapien. Duis sed magna
-            pulvinar, fringilla lorem eget, ullamcorper urna.
+            Здесь Вы найдёте избранные аудио книги с замечательного
+            православного ресурса azbyka.ru с расширенными возможностями поиска
+            и структурирования душеполезной информации с помощью индивидуальных
+            тематических тегов и закладок (ссылок на определённые места в аудио
+            дорожке).
           </p>
+          <a href="https://azbyka.ru/kak-pomoch?"
+            >Cкажем спасибо сайту azbyka.ru!</a
+          >
         </div>
       </div>
 
@@ -61,9 +65,6 @@ export default {
     return {
       booksArray: []
     };
-  },
-  computed: {
-    // ...mapGetters(["currentTrackCollection"])
   },
   // ///// Global vue life cycle functions
   // Used for quering database for user book list

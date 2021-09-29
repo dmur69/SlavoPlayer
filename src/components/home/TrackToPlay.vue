@@ -14,7 +14,10 @@
   >
     <div>
       <router-link
-        :to="{ name: 'track', params: { id: track.trackKey } }"
+        :to="{
+          name: 'track',
+          params: { book_id: book, track_id: track.trackKey }
+        }"
         class="font-bold block text-gray-600 tst-track-name"
       >
         Глава {{ this.track.chapter }}: {{ this.track.title }} |
@@ -49,6 +52,10 @@ export default {
   props: {
     track: {
       type: Object,
+      required: true
+    },
+    book: {
+      type: String,
       required: true
     }
   }

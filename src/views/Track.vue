@@ -151,6 +151,7 @@ export default {
   name: "Track",
   data() {
     return {
+      book: "",
       track: new TrackHandler(),
       currentTag: new TagHandler(),
       showTagEditForm: false
@@ -158,7 +159,7 @@ export default {
   },
   components: { AppTrackTags, AppTagEditForm },
   computed: {
-    ...mapGetters(["trackIsPlaying", "currentTrackCollection"]),
+    ...mapGetters(["trackIsPlaying"]),
     // ...mapGetters(["getCurrentPlayingtrackKey"]),
     // it's better to map entire object at once!
     ...mapState(["currentTrack"]),
@@ -182,7 +183,7 @@ export default {
       // Set as current tag
       this.currentTag = newTag;
       // Update in db
-      this.track.update(this.currentTrackCollection);
+      this.track.update(this.book);
       // ToDo: create and save Bookmark
       // Author: TrackTitle (BookTitle, SubTitle, Chapter)
       // All new tags will be automatically bookmarked
@@ -201,12 +202,12 @@ export default {
       // TagBookmarkKey (also id in DB) will be trackKey+Tagkey => simple to find
       // ToDo: user can also remove tag bookmark without removing tag
 
-      // Update in fsdb
-      await this.track.update(this.currentTrackCollection);
+      // Update in db
+      await this.track.update(this.book);
       // Redirect to track page without tag ui after successful update
       this.$router.push({
         name: "track",
-        params: { id: this.track.trackKey }
+        params: { book_id: this.book, track_id: this.track.trackKey }
       });
     }
   },
@@ -216,8 +217,8 @@ export default {
       const trackHandler = new TrackHandler(); // with empty param just handler
       // get certain track on key
       const foundTrack = await trackHandler.getOnKey(
-        this.currentTrackCollection,
-        this.$route.params.id
+        this.$route.params.book_id,
+        this.$route.params.track_id
       ); // Getter methods always return full TrackHanlder objects: with meta and methods
 
       // Nothing found => redirect to home
@@ -227,8 +228,9 @@ export default {
         return;
       }
 
-      // Set currentTrack
+      // Set currentTrack and book
       this.track = foundTrack;
+      this.book = this.$route.params.book_id;
 
       // Get tag from route and search in TrackTags on it
       const foundTag = this.track.tags
@@ -254,6 +256,7 @@ export default {
       console.log(
         `Unexpected error during loading track... Error message: ${error.message}`
       );
+      this.$router.push({ name: "home" });
     }
   }
 };

@@ -40,6 +40,7 @@
           <app-track-to-play
             v-for="track in userTracksList"
             :key="track.trackKey"
+            :book="currentBook"
             :track="track"
           />
         </ol>
@@ -51,7 +52,6 @@
 
 <script>
 import TrackHandler from "@/handlerobj/track";
-import { mapGetters } from "vuex";
 import AppTrackToPlay from "../components/home/TrackToPlay.vue";
 
 export default {
@@ -59,14 +59,16 @@ export default {
   components: {
     AppTrackToPlay
   },
+  props: [
+    "bookkey", // passt from route WITHOUT url param only on programatic call possible!
+    "book_id" // passt always from url
+  ],
   data() {
     return {
+      currentBook: "philokalia", // used as default book
       userTracksList: [],
       maxTracksPerPage: 30
     };
-  },
-  computed: {
-    ...mapGetters(["currentTrackCollection"])
   },
   methods: {
     // ///// Function called on certain scroll position to infinite scroll on tracks
@@ -110,6 +112,7 @@ export default {
           `Error while quering tracks from database: ${error.message}`
         );
       }
+      return tracksMetaArray.length;
     },
     // ///// Handler methods
     handleTrackListScroll() {
@@ -128,16 +131,33 @@ export default {
         console.log(
           "Bottom of page reached! Geting max number of tracks from firebase..."
         );
-        this.getTracks(this.currentTrackCollection);
+        this.getTracks(this.currentBook);
       }
     }
   },
   // ///// Global vue life cycle functions
   // Used for quering database for user track list
   async created() {
-    // ToDo: set current track collection in store
-    // ToDo: design on link click is broken
-    this.getTracks(this.currentTrackCollection);
+    let count = 0;
+    const currentBook = this.$route.params.book_id; // from Url
+    // We try tom load with collection from url param
+    if (currentBook) {
+      // console.log("Try to load from collection1");
+      count = await this.getTracks(currentBook);
+    }
+    console.log("Understand pros = true router feature");
+    // undefined on Url call // this.bookkey = this.book_id on calling programmatically
+    console.log(currentBook);
+    console.log(this.bookkey);
+    console.log(this.book_id); // this.book_id = this.$route.params.book_id always!
+    // If it fails, we load our default collection
+    if (count < 1) {
+      this.getTracks(currentBook);
+    } else {
+      // Chage only after validation
+      this.currentBook = currentBook;
+    }
+    console.log(this.currentBook);
     window.addEventListener("scroll", this.handleTrackListScroll);
   },
   beforeUnmount() {
