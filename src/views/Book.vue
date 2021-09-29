@@ -104,7 +104,7 @@ export default {
             ...trackMeta
           });
           this.userTracksList.push(trackArrayItem);
-          console.log("trackArrayItem added.");
+          // console.log("trackArrayItem added.");
           // console.log(trackArrayItem);
         });
       } catch (error) {

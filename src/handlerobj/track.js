@@ -4,7 +4,7 @@ import TrackMapper from "@/datamappers/firebase/firestore/tracks";
 
 class TrackHandler {
   constructor(tr) {
-    console.log("Entering constructor");
+    // console.log("Entering constructor");
     if (tr) {
       // See getMeta for details:
       this.trackKey = tr.trackKey;

@@ -133,7 +133,7 @@ export default {
       // Load global tag list only on first click
       if (!this.tagSearchIsActive && !this.allTags[0]) {
         const tagHandler = new TagHandler(); // Without params just handler with no meta
-        this.allTags = await tagHandler.get({ sortOnColumn: "title" }); // Without params gets all
+        this.allTags = await tagHandler.get({ sortOnColumn: "displayName" }); // Without params gets all
         console.log("Global tag list loaded:");
         this.allTags.forEach((tag) => {
           console.log(tag.displayName);
@@ -171,11 +171,12 @@ export default {
       // We already have the global tag list on client
       const tagHandler = new TagHandler(newTagCandidate); // With param stores tag meta data
       tagHandler.save(); // Try to save this tag meta data to db
+      this.addNewTag(tagHandler.getMeta()); // Add to UI
     },
     addNewTag(tag) {
       console.log("addNewTag");
       const tagToAdd = tag;
-      console.log(tagToAdd);
+      // console.log(tagToAdd);
       tagToAdd.position = this.currentTrackPosition;
       console.log(tagToAdd);
       this.$emit("add-tag", tagToAdd);
@@ -183,7 +184,7 @@ export default {
   },
   async created() {
     console.log("TrackTags vue created");
-    console.log(this.currentTag);
+    // console.log(this.currentTag);
     if (this.$route.params.tag_id) {
       this.currentTagKey = this.$route.params.tag_id;
     }

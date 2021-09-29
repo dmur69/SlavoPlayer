@@ -58,11 +58,18 @@ class AbstractkMapper {
   // return back abstract entity objects, caller can deal with
   async getDocs(params) {
     console.log("getDocs() in abstract1");
-    if (params.numberOfItems) {
-      await this.findNext(params);
-    } else {
-      await this.findAll(params);
+    const p = params;
+    // If source not set, try alternatively read from pre-defined collection
+    // Only for tracks source should to be passed via getDocs
+    if (!p.source) {
+      p.source = this.collectionName;
     }
+    if (p.numberOfItems) {
+      await this.findNext(p);
+    } else {
+      await this.findAll(p);
+    }
+    console.log(this.docsArray);
     return this.docsArray;
   }
 
