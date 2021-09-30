@@ -11,7 +11,9 @@
       focus:border-black
       rounded
       border
+      cursor-pointer
     "
+    title="Открыть закладку или тег для прослушивания и редактирования"
     :class="isCurrentTag ? 'border-yellow-400' : 'border-gray-300'"
     @click.prevent="clickOnTagHandler"
   >

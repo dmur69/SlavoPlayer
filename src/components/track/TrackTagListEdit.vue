@@ -1,44 +1,22 @@
 <template>
   <section class="container mx-auto mt-6" id="tags">
     <div class="md:grid md:grid-cols-4 md:gap-4">
-      <div class="col-span-1">
+      <div id="tagsDropdown" class="dropdown-content">
         <input
           type="text"
-          class="
-            block
-            w-full
-            py-2.5
-            px-3
-            text-gray-800
-            border border-gray-300
-            transition
-            duration-500
-            focus:outline-none
-            focus:border-black
-            rounded
-          "
-          placeholder="Add Tag"
+          placeholder="Search.."
+          id="newTagInput"
+          v-on:keyup.enter="createNewTag"
+          v-on:keyup="filterTags"
         />
-        <div id="tagsDropdown" class="dropdown-content">
-          <input
-            type="text"
-            placeholder="Search.."
-            id="newTagInput"
-            v-on:keyup.enter="createNewTag"
-            v-on:keyup="filterTags"
-          />
-          <app-tag-to-select
-            @tag-add="addNewTag"
-            v-for="tag in allTags"
-            :key="tag.tagKey"
-            :tag="tag"
-          />
-        </div>
+        <app-tag-to-select
+          @tag-add="addNewTag"
+          v-for="tag in allTags"
+          :key="tag.tagKey"
+          :tag="tag"
+        />
       </div>
-      <!-- <div class="dropdown" TODO: remove classes from main.css>
-          <button @click="myFunction" class="dropbtn">Dropdown</button>
-        </div> -->
-      <div class="col-span-3">
+      <div class="col-span-4">
         <span
           class="
             w-full
@@ -51,7 +29,9 @@
             focus:outline-none
             focus:border-black
             rounded
+            cursor-pointer
           "
+          title="Добавить закладку или тег"
           @click="handleTagDropDownClick"
           >+</span
         >

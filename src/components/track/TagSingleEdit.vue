@@ -11,6 +11,7 @@
         <div
           class="modal-close cursor-pointer z-50 float-right"
           @click.prevent="clickOnClose"
+          title="Закрыть форму редактироавния"
         >
           <i class="fas fa-times" />
         </div>
@@ -20,8 +21,11 @@
             v-if="currentTag.isBookmarked"
             class="fas fa-star pr-2 text-yellow-300"
           />
-          <span class="card-title">
-            Режим работы (нажмите сюда чтобы переключить):
+          <span
+            class="card-title"
+            title="Нажмите сюда для выбора режима работы: обычрый тег или закладка"
+          >
+            Режим работы (переключить):
             <span class="font-bold" v-if="currentTag.isBookmarked"
               >Закладка</span
             >
@@ -51,10 +55,10 @@
 дополнительную информацию."
         ></textarea>
         <button
-          class="py-1.5 px-3 rounded text-white bg-green-600 block"
+          class="py-1.5 px-3 rounded text-white bg-red-400 block"
           @click.prevent="clickOnRemoveTag"
         >
-          Remove
+          Удалить тег
         </button>
       </div>
     </div>
