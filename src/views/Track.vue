@@ -56,6 +56,7 @@
       :currentTag="currentTag"
       @close-click="showTagEditForm = false"
       @tag-remove="removeTag"
+      @tag-toggle-mode="handleTagModeChange"
     />
     <!-- Form for Comment can be used later for Notes-->
     <!-- Area below is still static mockup -->
@@ -144,8 +145,8 @@
 import TrackHandler from "@/handlerobj/track";
 import TagHandler from "@/handlerobj/tag";
 import { mapActions, mapState, mapGetters } from "vuex";
-import AppTrackTags from "@/components/track/TrackTags.vue";
-import AppTagEditForm from "@/components/track/TagEditForm.vue";
+import AppTrackTags from "@/components/track/TrackTagListEdit.vue";
+import AppTagEditForm from "@/components/track/TagSingleEdit.vue";
 
 export default {
   name: "Track",
@@ -209,6 +210,11 @@ export default {
         name: "track",
         params: { book_id: this.book, track_id: this.track.trackKey }
       });
+    },
+    handleTagModeChange() {
+      console.log("// ToDo: add and remove Bookmark objects");
+      // console.log(this.currentTag);
+      this.currentTag.isBookmarked = !this.currentTag.isBookmarked;
     }
   },
   async created() {

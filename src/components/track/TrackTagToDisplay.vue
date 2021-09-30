@@ -15,6 +15,7 @@
     :class="isCurrentTag ? 'border-yellow-400' : 'border-gray-300'"
     @click.prevent="clickOnTagHandler"
   >
+    <i v-if="tag.isBookmarked" class="fas fa-star pr-1 text-yellow-300" />
     {{ this.tag.displayName }}</span
   >
 </template>

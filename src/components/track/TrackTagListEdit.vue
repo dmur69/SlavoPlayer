@@ -68,8 +68,8 @@
 </template>
 
 <script>
-import AppTagToSelect from "@/components/track/TagToSelect.vue";
-import AppTagToDisplay from "@/components/track/TagToDisplay.vue";
+import AppTagToSelect from "@/components/track/TrackTagToSelect.vue";
+import AppTagToDisplay from "@/components/track/TrackTagToDisplay.vue";
 import TagHandler from "@/handlerobj/tag";
 import { mapGetters } from "vuex";
 

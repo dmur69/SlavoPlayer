@@ -1,11 +1,12 @@
 <template>
   <section class="container mx-auto mt-6">
     <div class="bg-white rounded border border-gray-200 relative flex flex-col">
-      <div class="px-6 pt-6 pb-5 font-bold border-b border-gray-200">
+      <div class="px-6 pt-6 pb-5 border-b border-gray-200">
         <!-- Tag Edit form -->
         <span class="card-title"
-          >Выбранный тег: {{ this.currentTag.displayName }}</span
-        >
+          >Выбранный тег:
+          <span class="font-bold">{{ this.currentTag.displayName }}</span>
+        </span>
         <!-- Close Button -->
         <div
           class="modal-close cursor-pointer z-50 float-right"
@@ -13,12 +14,19 @@
         >
           <i class="fas fa-times" />
         </div>
-        <div class="pt-3" @click.prevent="clickOnToggleMode">
+        <div class="cursor-pointer pt-3" @click.prevent="clickOnToggleMode">
           <!-- Tag/Bookmark mode switch -->
-          <i class="cursor-pointer fas fa-star pr-4 text-yellow-300" />
-          <span class="card-title"
-            >Mode: {{ this.currentTag.displayName }}</span
-          >
+          <i
+            v-if="currentTag.isBookmarked"
+            class="fas fa-star pr-2 text-yellow-300"
+          />
+          <span class="card-title">
+            Режим работы (нажмите сюда чтобы переключить):
+            <span class="font-bold" v-if="currentTag.isBookmarked"
+              >Закладка</span
+            >
+            <span class="font-bold" v-else>Обычный тег</span>
+          </span>
         </div>
       </div>
       <div class="p-6">
@@ -38,7 +46,7 @@
             rounded
             mb-4
           "
-          placeholder="В режиме закладки тег запоминает актульную позицию звуковой дорожки
+          placeholder="В режиме работы 'Закладка' тег запоминает актульную позицию звуковой дорожки
 и отображается в Вашем центральном списке закладок. Нажмите на символ чтобы удалить эту
 дополнительную информацию."
         ></textarea>
@@ -69,7 +77,7 @@ export default {
     },
     clickOnToggleMode() {
       console.log("clickOnToggleMode");
-      // this.$emit("tag-remove", this.currentTag);
+      this.$emit("tag-toggle-mode");
     },
     clickOnClose() {
       console.log("clickOnClose");
