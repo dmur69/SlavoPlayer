@@ -1,3 +1,4 @@
+/* eslint-disable vue/valid-v-for */
 <template>
   <li
     class="
@@ -27,7 +28,23 @@
         >
       </router-link>
     </div>
-    <!-- <div class="text-gray-600 text-lg">
+    <div class="text-gray-500 font-bold text-sm pr-3">
+      <span v-for="tag in track.tags" :key="tag.tagKey">
+        <i
+          v-if="tag.isBookmarked"
+          :title="tag.displayName"
+          class="fas fa-star pr-1 text-yellow-300"
+        />
+      </span>
+      <span class="pr-1" title="Общее количество закладок">{{
+        this.bookmarks.length
+      }}</span
+      >|<span class="pl-1" title="Общее количество тегов">{{
+        this.track.tags.length
+      }}</span>
+    </div>
+    <!-- Example to navigate to hash (certain place on webpage)
+      <div class="text-gray-600 text-lg">
       <router-link
         custom
         :to="{
@@ -57,6 +74,11 @@ export default {
     book: {
       type: String,
       required: true
+    }
+  },
+  computed: {
+    bookmarks() {
+      return this.track.tags.filter((t) => t.isBookmarked === true);
     }
   }
 };
