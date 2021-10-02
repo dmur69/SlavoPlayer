@@ -28,7 +28,7 @@ const routes = [
     component: Track
   },
   {
-    name: "track_tag_link",
+    name: "track_tag",
     path: "/book/:book_id/track/:track_id/tag/:tag_id",
     component: Track
   },

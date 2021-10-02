@@ -30,11 +30,22 @@
     </div>
     <div class="text-gray-500 font-bold text-sm pr-3">
       <span v-for="tag in track.tags" :key="tag.tagKey">
-        <i
-          v-if="tag.isBookmarked"
-          :title="tag.displayName"
-          class="fas fa-star pr-1 text-yellow-300"
-        />
+        <router-link
+          :to="{
+            name: 'track_tag',
+            params: {
+              book_id: track.bookKey,
+              track_id: track.trackKey,
+              tag_id: tag.tagKey
+            }
+          }"
+        >
+          <i
+            v-if="tag.isBookmarked"
+            :title="tag.displayName"
+            class="fas fa-star pr-1 text-yellow-300"
+          />
+        </router-link>
       </span>
       <span class="pr-1" title="Общее количество закладок">{{
         this.bookmarks.length

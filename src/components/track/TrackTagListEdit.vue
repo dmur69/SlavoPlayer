@@ -100,7 +100,7 @@ export default {
       // and load matching TagEditForm via route call
       console.log("Loading TagEditForm via route call");
       this.$router.push({
-        name: "track_tag_link",
+        name: "track_tag",
         params: { id: this.parentTrack.trackKey, tag_id: clickedTag.tagKey }
       });
     },
