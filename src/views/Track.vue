@@ -215,6 +215,9 @@ export default {
       console.log("// ToDo: add and remove Bookmark objects");
       // console.log(this.currentTag);
       this.currentTag.isBookmarked = !this.currentTag.isBookmarked;
+
+      // Update in db
+      this.track.update(this.book);
     }
   },
   async created() {

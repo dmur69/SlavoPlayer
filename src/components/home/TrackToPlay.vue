@@ -1,4 +1,3 @@
-/* eslint-disable vue/valid-v-for */
 <template>
   <li
     class="
@@ -13,6 +12,7 @@
       hover:bg-gray-50
     "
   >
+    <!-- Track info with link to track -->
     <div>
       <router-link
         :to="{
@@ -28,8 +28,10 @@
         >
       </router-link>
     </div>
+    <!-- Statistic area -->
     <div class="text-gray-500 font-bold text-sm pr-3">
       <span v-for="tag in track.tags" :key="tag.tagKey">
+        <!-- Stars as link to tag -->
         <router-link
           :to="{
             name: 'track_tag',
@@ -85,11 +87,6 @@ export default {
     book: {
       type: String,
       required: true
-    }
-  },
-  computed: {
-    bookmarks() {
-      return this.track.tags.filter((t) => t.isBookmarked === true);
     }
   }
 };
