@@ -74,13 +74,15 @@ class TrackHandler {
 
   // Creates new Track
   save(destination) {
-    const trackMapper = new TrackMapper(destination, this.getMeta());
+    const dest = !destination ? this.bookKey : destination;
+    const trackMapper = new TrackMapper(dest, this.getMeta());
     trackMapper.save();
   }
 
   // Updates existing Track
   update(destination) {
-    const trackMapper = new TrackMapper(destination, this.getMeta());
+    const dest = !destination ? this.bookKey : destination;
+    const trackMapper = new TrackMapper(dest, this.getMeta());
     // if (propsToUpdate) {
     //   trackMapper.update(propsToUpdate);
     // } else {

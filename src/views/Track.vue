@@ -152,7 +152,6 @@ export default {
   name: "Track",
   data() {
     return {
-      book: "",
       track: new TrackHandler(),
       currentTag: new TagHandler(),
       showTagEditForm: false
@@ -184,7 +183,7 @@ export default {
       // Set as current tag
       this.currentTag = newTag;
       // Update in db
-      this.track.update(this.book);
+      this.track.update();
       // ToDo: create and save Bookmark
       // Author: TrackTitle (BookTitle, SubTitle, Chapter)
       // All new tags will be automatically bookmarked
@@ -204,11 +203,11 @@ export default {
       // ToDo: user can also remove tag bookmark without removing tag
 
       // Update in db
-      await this.track.update(this.book);
+      await this.track.update();
       // Redirect to track page without tag ui after successful update
       this.$router.push({
         name: "track",
-        params: { book_id: this.book, track_id: this.track.trackKey }
+        params: { book_id: this.track.bookKey, track_id: this.track.trackKey }
       });
     },
     handleTagModeChange() {
@@ -217,7 +216,7 @@ export default {
       this.currentTag.isBookmarked = !this.currentTag.isBookmarked;
 
       // Update in db
-      this.track.update(this.book);
+      this.track.update();
     }
   },
   async created() {
@@ -237,9 +236,8 @@ export default {
         return;
       }
 
-      // Set currentTrack and book
+      // Set currentTrack
       this.track = foundTrack;
-      this.book = this.$route.params.book_id;
 
       // Get tag from route and search in TrackTags on it
       const foundTag = this.track.tags
