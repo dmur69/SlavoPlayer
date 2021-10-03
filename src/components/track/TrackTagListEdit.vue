@@ -1,44 +1,22 @@
 <template>
   <section class="container mx-auto mt-6" id="tags">
     <div class="md:grid md:grid-cols-4 md:gap-4">
-      <div class="col-span-1">
+      <div id="tagsDropdown" class="dropdown-content">
         <input
           type="text"
-          class="
-            block
-            w-full
-            py-2.5
-            px-3
-            text-gray-800
-            border border-gray-300
-            transition
-            duration-500
-            focus:outline-none
-            focus:border-black
-            rounded
-          "
-          placeholder="Add Tag"
+          placeholder="Search.."
+          id="newTagInput"
+          v-on:keyup.enter="createNewTag"
+          v-on:keyup="filterTags"
         />
-        <div id="tagsDropdown" class="dropdown-content">
-          <input
-            type="text"
-            placeholder="Search.."
-            id="newTagInput"
-            v-on:keyup.enter="createNewTag"
-            v-on:keyup="filterTags"
-          />
-          <app-tag-to-select
-            @tag-add="addNewTag"
-            v-for="tag in allTags"
-            :key="tag.tagKey"
-            :tag="tag"
-          />
-        </div>
+        <app-tag-to-select
+          @tag-add="addNewTag"
+          v-for="tag in allTags"
+          :key="tag.tagKey"
+          :tag="tag"
+        />
       </div>
-      <!-- <div class="dropdown" TODO: remove classes from main.css>
-          <button @click="myFunction" class="dropbtn">Dropdown</button>
-        </div> -->
-      <div class="col-span-3">
+      <div class="col-span-4">
         <span
           class="
             w-full
@@ -51,14 +29,18 @@
             focus:outline-none
             focus:border-black
             rounded
+            cursor-pointer
           "
-          @click="toggleTagDropDown"
+          title="Добавить закладку или тег"
+          @click="handleTagDropDownClick"
           >+</span
         >
         <app-tag-to-display
           v-for="tag in parentTrack.tags"
           :key="tag.tagKey"
           :tag="tag"
+          :isCurrentTag="currentTagKey === tag.tagKey ? true : false"
+          @tag-click="handleOnTagClick"
         />
       </div>
     </div>
@@ -66,9 +48,10 @@
 </template>
 
 <script>
-import AppTagToSelect from "@/components/track/TagToSelect.vue";
-import AppTagToDisplay from "@/components/track/TagToDisplay.vue";
+import AppTagToSelect from "@/components/track/TrackTagToSelect.vue";
+import AppTagToDisplay from "@/components/track/TrackTagToDisplay.vue";
 import TagHandler from "@/handlerobj/tag";
+import { mapGetters } from "vuex";
 
 /*
 Becomes trackKey as param
@@ -83,8 +66,10 @@ export default {
   components: { AppTagToSelect, AppTagToDisplay },
   data() {
     return {
+      savedTrackPosition: 0,
       tagSearchIsActive: false,
-      allTags: []
+      allTags: [],
+      currentTagKey: ""
     };
   },
   props: {
@@ -94,15 +79,41 @@ export default {
       required: true
     }
   },
+  computed: {
+    ...mapGetters(["currentTrackPosition"])
+  },
   methods: {
-    // Toggle dropdown for adding new tags
-    async toggleTagDropDown() {
+    // Opens area to edit tags and performs other actions
+    handleOnTagClick(clickedTag) {
+      console.log("handleOnTagClick(clickedTag)");
+
+      this.$emit("tag-click"); // Forward event to grand parent
+      // to evtl show tag edit form (initially closed)
+
+      // No action if tag edit form for clicked tag is already open
+      if (this.currentTagKey === clickedTag.tagKey) {
+        return;
+      }
+
+      // Change current tag
+      this.currentTagKey = clickedTag.tagKey;
+      // and load matching TagEditForm via route call
+      console.log("Loading TagEditForm via route call");
+      this.$router.push({
+        name: "track_tag",
+        params: { id: this.parentTrack.trackKey, tag_id: clickedTag.tagKey }
+      });
+    },
+    // Toggles dropdown for adding new tags and performs other actions
+    async handleTagDropDownClick() {
       document.getElementById("tagsDropdown").classList.toggle("show");
+
+      this.savedTrackPosition = this.currentTrackPosition;
 
       // Load global tag list only on first click
       if (!this.tagSearchIsActive && !this.allTags[0]) {
         const tagHandler = new TagHandler(); // Without params just handler with no meta
-        this.allTags = await tagHandler.get(); // Without params gets all
+        this.allTags = await tagHandler.get({ sortOnColumn: "displayName" }); // Without params gets all
         console.log("Global tag list loaded:");
         this.allTags.forEach((tag) => {
           console.log(tag.displayName);
@@ -140,13 +151,24 @@ export default {
       // We already have the global tag list on client
       const tagHandler = new TagHandler(newTagCandidate); // With param stores tag meta data
       tagHandler.save(); // Try to save this tag meta data to db
+      this.addNewTag(tagHandler.getMeta()); // Add to UI
     },
     addNewTag(tag) {
       console.log("addNewTag");
-      // this.track.tags.push(tag);
-      // console.log(this.track);
-      this.$emit("update-track-tags", tag);
+      const tagToAdd = tag;
+      // console.log(tagToAdd);
+      tagToAdd.position = this.currentTrackPosition;
+      console.log(tagToAdd);
+      this.$emit("add-tag", tagToAdd);
     }
+  },
+  async created() {
+    console.log("TrackTags vue created");
+    // console.log(this.currentTag);
+    if (this.$route.params.tag_id) {
+      this.currentTagKey = this.$route.params.tag_id;
+    }
+    console.log(this.currentTag);
   }
 };
 </script>

@@ -4,7 +4,7 @@
     <app-header />
 
     <!-- Page contens via vue router -->
-    <router-view></router-view>
+    <router-view :key="$route.fullPath"></router-view>
 
     <!-- Player with all advanced features -->
     <app-player />

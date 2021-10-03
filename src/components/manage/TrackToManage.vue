@@ -163,11 +163,8 @@ export default {
       this.track_alert_message = "Track was updated!";
       setTimeout(() => {
         this.track_in_submission = false;
-        // update name and genre in parent component via prop function:
-        // this.updateTrackInList(values, this.track.arrayId);
-        // update ... via emitting custom event "track_update"
         const modifiedTrackMeta = {
-          arrayId: this.track.arrayId,
+          // arrayId: this.track.arrayId, // ToDo: has to redisigned, when we need Upload at all
           ...values
         };
         this.$emit("track-updated", modifiedTrackMeta);

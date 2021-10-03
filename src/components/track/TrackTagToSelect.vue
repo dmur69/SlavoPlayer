@@ -13,7 +13,8 @@ export default {
   },
   methods: {
     clickOnTagHandler() {
-      //   console.log(this.tag);
+      console.log("clickOnTagHandler()");
+      console.log(this.tag);
       this.$emit("tag-add", this.tag);
     }
   }

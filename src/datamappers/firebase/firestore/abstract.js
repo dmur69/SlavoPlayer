@@ -28,6 +28,7 @@ class AbstractkMapper {
         .set(this.objectToSave);
       console.log("Created new document in firestore.");
     } catch (error) {
+      console.log(this);
       console.log(
         `Unexpected error on saving track meta... Error message: ${error.message}`
       );
@@ -55,14 +56,20 @@ class AbstractkMapper {
 
   // Get methods
   // return back abstract entity objects, caller can deal with
-  async getDocs(numberOf, startAfterKey) {
+  async getDocs(params) {
     console.log("getDocs() in abstract1");
-    if (numberOf) {
-      await this.findNext(numberOf, startAfterKey);
-    } else {
-      await this.findAll();
+    const p = params;
+    // If source not set, try alternatively read from pre-defined collection
+    // Only for tracks source should to be passed via getDocs
+    if (!p.source) {
+      p.source = this.collectionName;
     }
-    console.log("getDocs() in abstract2");
+    if (p.numberOfItems) {
+      await this.findNext(p);
+    } else {
+      await this.findAll(p);
+    }
+    console.log(this.docsArray);
     return this.docsArray;
   }
 
@@ -90,7 +97,7 @@ class AbstractkMapper {
   }
 
   // Find helper methods
-  async findAll() {
+  async findAll(params) {
     try {
       console.log("findAll in abstract1");
       // Avoid sending muliple calls at a time
@@ -99,10 +106,10 @@ class AbstractkMapper {
         return;
       }
       this.request.pending = true;
-      console.log(this.collectionName);
+      console.log(params.source);
       const docSnapshots = await db
-        .collection(this.collectionName)
-        // .orderBy("nr")
+        .collection(params.source)
+        .orderBy(params.sortOnColumn)
         .get();
       docSnapshots.forEach(docSnapshot => {
         const doc = {
@@ -117,7 +124,7 @@ class AbstractkMapper {
     console.log("findAll in abstract2");
   }
 
-  async findNext(numberOfDocs, startAfterKey) {
+  async findNext(params) {
     try {
       // Avoid sending muliple calls at a time
       if (this.request.pending) {
@@ -127,28 +134,29 @@ class AbstractkMapper {
       this.request.pending = true;
 
       let docSnapshots;
-      console.log(this.collectionName);
-      console.log(startAfterKey);
-      console.log(numberOfDocs);
-      if (startAfterKey) {
-        console.log("Quering firebase with findNext. Start after:");
-
+      console.log(params.source);
+      console.log(params);
+      if (params.startAfterKey) {
+        console.log(
+          `Quering firebase with findNext. Start after:${params.startAfterKey}`
+        );
         const startAfterDoc = await db
-          .collection(this.collectionName)
-          .doc(startAfterKey)
+          .collection(params.source)
+          .doc(params.startAfterKey)
           .get();
+
         docSnapshots = await db
-          .collection(this.collectionName)
-          .orderBy("nr")
+          .collection(params.source)
+          .orderBy(params.sortOnColumn)
           .startAfter(startAfterDoc)
-          .limit(numberOfDocs)
+          .limit(params.numberOfItems)
           .get();
       } else {
         console.log("Quering firebase with findNext. Start from beginning.");
         docSnapshots = await db
-          .collection(this.collectionName)
-          .orderBy("nr")
-          .limit(numberOfDocs)
+          .collection(params.source)
+          .orderBy(params.sortOnColumn)
+          .limit(params.numberOfItems)
           .get();
       }
       console.log(docSnapshots);
