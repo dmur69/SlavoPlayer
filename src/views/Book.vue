@@ -40,7 +40,6 @@
           <app-track-to-play
             v-for="track in userTracksList"
             :key="track.trackKey"
-            :book="currentBook"
             :track="track"
           />
         </ol>
@@ -76,9 +75,9 @@ export default {
       let tracksMetaArray = [];
       try {
         const trackHandler = new TrackHandler(); // Create just handler object
-        console.log(
-          `this.userTracksList.length: ${this.userTracksList.length}`
-        );
+        // console.log(
+        //   `this.userTracksList.length: ${this.userTracksList.length}`
+        // );
         if (this.userTracksList.length) {
           const { trackKey } =
             this.userTracksList[this.userTracksList.length - 1];

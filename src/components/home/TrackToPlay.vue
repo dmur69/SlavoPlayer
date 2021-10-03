@@ -17,7 +17,7 @@
       <router-link
         :to="{
           name: 'track',
-          params: { book_id: book, track_id: track.trackKey }
+          params: { book_id: track.bookKey, track_id: track.trackKey }
         }"
         class="font-bold block text-gray-600 tst-track-name"
       >
@@ -83,10 +83,11 @@ export default {
     track: {
       type: Object,
       required: true
-    },
-    book: {
-      type: String,
-      required: true
+    }
+  },
+  computed: {
+    bookmarks() {
+      return this.track.tags.filter((t) => t.isBookmarked === true);
     }
   }
 };
