@@ -14,18 +14,9 @@ export default createStore({
       seek: "00:00", // Current postion in sec
       seekPercentage: "0%", // Current position in % for progres bar and ball
       duration: "00:00" // Track full duration
-    },
-    currentTrackCollection: "philokalia",
-    defaultTrackCollection: "tracks"
+    }
   },
   mutations: {
-    setStartTrackPosition(state, payload) {
-      state.currentTrack.seek = helper.formatSecToTimerValue(payload.seek);
-      state.currentTrack.duration = payload.duration; // helper.formatSecToTimerValue();
-      state.currentTrack.seekPercentage = `${(payload.seek /
-        helper.formatTimerValueToSec(payload.duration)) *
-        100}%`;
-    },
     changeCurrentTrack: (state, payload) => {
       state.currentTrack.meta = payload.track;
       console.log("Current track changed...");
@@ -40,6 +31,13 @@ export default createStore({
       }
       console.log(state.currentTrack);
     },
+    setStartTrackPosition(state, payload) {
+      state.currentTrack.seek = helper.formatSecToTimerValue(payload.seek);
+      state.currentTrack.duration = payload.duration; // helper.formatSecToTimerValue();
+      state.currentTrack.seekPercentage = `${(payload.seek /
+        helper.formatTimerValueToSec(payload.duration)) *
+        100}%`;
+    },
     updateTrackPosition(state) {
       const seek = state.currentTrack.sound.seek();
       const duration = state.currentTrack.sound.duration();
@@ -49,7 +47,13 @@ export default createStore({
     }
   },
   getters: {
-    currentTrackCollection: state => state.currentTrackCollection,
+    currentTrackPosition: state => {
+      let pos = 0;
+      if (state.currentTrack.sound.playing) {
+        pos = state.currentTrack.sound.seek();
+      }
+      return pos;
+    },
     trackIsPlaying: state => {
       let playing = false;
       if (state.currentTrack.sound.playing) {

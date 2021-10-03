@@ -18,8 +18,8 @@ class TagMapper {
 
   // Get methods
   // return back entity objects, caller can deal with
-  async get(numberOfDocs, startAfterKey) {
-    const tags = await this.abstactMapper.getDocs(numberOfDocs, startAfterKey);
+  async get(params) {
+    const tags = await this.abstactMapper.getDocs(params);
     return tags;
   }
 }

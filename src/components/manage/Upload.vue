@@ -4,7 +4,7 @@
       <span class="card-title">Upload</span>
       <i
         class="fas fa-upload float-right text-green-400 text-2xl"
-        @click="savePlaylist"
+        @click="savePlaylistFromJson"
       ></i>
     </div>
     <div class="p-6">
@@ -60,8 +60,10 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+// import { mapGetters } from "vuex";
 import azbyka from "@/fakedata/azbyka-tracks";
+import trackImportSource from "@/fakedata/dobrotoljubie-tom-5.json";
+// import trackImportSource from "@/fakedata/tomX???.json";
 import TrackHandler from "@/handlerobj/track";
 import { storage, auth, tracks } from "@/datamappers/firebase/firebase";
 
@@ -69,12 +71,10 @@ export default {
   name: "Upload",
   data() {
     return {
+      destinationCollection: "philokalia",
       is_dragover: false,
       uploads: []
     };
-  },
-  computed: {
-    ...mapGetters(["currentTrackCollection"])
   },
   methods: {
     // Manages audio file upload / called on event
@@ -148,7 +148,7 @@ export default {
               // ///////////////////////////////////
               // Our TRACK or TrackList object ToDo: separate model
               const trackListItem = {
-                arrayId: "track_added",
+                // arrayId: "track_added", // ToDo: has to redisigned, when we need Upload at all
                 trackKey: trackDocSnapshot.id,
                 ...trackDocSnapshot.data()
               };
@@ -159,10 +159,17 @@ export default {
       });
     },
     // Manages audio file upload / called on button click
-    savePlaylist() {
+    savePlaylistFakeData() {
       azbyka.defaultPlaylist().forEach((item) => {
         const trackHandler = new TrackHandler(item); // Create with track meta data
-        trackHandler.save(this.currentTrackCollection); // Tries to save this track meta to db
+        trackHandler.save(this.destinationCollection); // Tries to save this track meta to db
+        // TrackHandler has to know collection z.B "philokalia" save in
+      });
+    },
+    savePlaylistFromJson() {
+      trackImportSource.forEach((item) => {
+        const trackHandler = new TrackHandler(item); // Create with track meta data
+        trackHandler.save(this.destinationCollection); // Tries to save this track meta to db
         // TrackHandler has to know collection z.B "philokalia" save in
       });
     },

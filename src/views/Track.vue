@@ -33,15 +33,31 @@
         </button>
         <div class="z-50 text-left ml-8">
           <!-- Song Info -->
-          <div class="text-3xl font-bold">
-            {{ this.track.title }}
+          <div class="text-xl font-bold">
+            {{ this.track.bookTitle }} | {{ this.track.subtitle }}
           </div>
-          <div>{{ track.genre }}</div>
+          <div class="text-xl font-bold">
+            {{ this.track.author }}
+          </div>
+          <div class="text-2xl font-bold">
+            Глава {{ this.track.chapter }}: {{ this.track.title }}
+          </div>
         </div>
       </div>
     </section>
     <!-- Tag management area -->
-    <app-track-tags :parentTrack="track" @update-track-tags="updateTrackTags" />
+    <app-track-tags
+      :parentTrack="track"
+      @tag-click="this.showTagEditForm = true"
+      @add-tag="addTag"
+    />
+    <app-tag-edit-form
+      v-show="showTagEditForm"
+      :currentTag="currentTag"
+      @close-click="showTagEditForm = false"
+      @tag-remove="removeTag"
+      @tag-toggle-mode="handleTagModeChange"
+    />
     <!-- Form for Comment can be used later for Notes-->
     <!-- Area below is still static mockup -->
     <section class="container mx-auto mt-6" id="comments">
@@ -127,20 +143,23 @@
 
 <script>
 import TrackHandler from "@/handlerobj/track";
+import TagHandler from "@/handlerobj/tag";
 import { mapActions, mapState, mapGetters } from "vuex";
-import AppTrackTags from "@/components/track/TrackTags.vue";
+import AppTrackTags from "@/components/track/TrackTagListEdit.vue";
+import AppTagEditForm from "@/components/track/TagSingleEdit.vue";
 
 export default {
   name: "Track",
   data() {
     return {
-      track: {},
-      currentTag: {}
+      track: new TrackHandler(),
+      currentTag: new TagHandler(),
+      showTagEditForm: false
     };
   },
-  components: { AppTrackTags },
+  components: { AppTrackTags, AppTagEditForm },
   computed: {
-    ...mapGetters(["trackIsPlaying", "currentTrackCollection"]),
+    ...mapGetters(["trackIsPlaying"]),
     // ...mapGetters(["getCurrentPlayingtrackKey"]),
     // it's better to map entire object at once!
     ...mapState(["currentTrack"]),
@@ -158,13 +177,46 @@ export default {
     // toggle playing (if user stays on the same track)
     // or start new track on change
     ...mapActions(["tryPlayNextTrack", "setStartPosition"]),
-    updateTrackTags(newTag) {
+    addTag(newTag) {
       // Update UI
       this.track.tags.push(newTag);
       // Set as current tag
       this.currentTag = newTag;
-      // Update in fsdb
-      this.track.update(this.currentTrackCollection);
+      // Update in db
+      this.track.update();
+      // ToDo: create and save Bookmark
+      // Author: TrackTitle (BookTitle, SubTitle, Chapter)
+      // All new tags will be automatically bookmarked
+    },
+    async removeTag(tagToRemove) {
+      console.log("removing Tag");
+      console.log(tagToRemove);
+      // Update UI
+      const arrayId = this.track.tags.findIndex(
+        (tag) => tag.tagKey === tagToRemove.tagKey
+      );
+      if (arrayId > -1) {
+        this.track.tags.splice(arrayId, 1);
+      }
+      // ToDo: if tagToRemove.isBookmarked => remove Bookmark
+      // TagBookmarkKey (also id in DB) will be trackKey+Tagkey => simple to find
+      // ToDo: user can also remove tag bookmark without removing tag
+
+      // Update in db
+      await this.track.update();
+      // Redirect to track page without tag ui after successful update
+      this.$router.push({
+        name: "track",
+        params: { book_id: this.track.bookKey, track_id: this.track.trackKey }
+      });
+    },
+    handleTagModeChange() {
+      console.log("// ToDo: add and remove Bookmark objects");
+      // console.log(this.currentTag);
+      this.currentTag.isBookmarked = !this.currentTag.isBookmarked;
+
+      // Update in db
+      this.track.update();
     }
   },
   async created() {
@@ -172,31 +224,37 @@ export default {
       // Handle route calls
       const trackHandler = new TrackHandler(); // with empty param just handler
       // get certain track on key
-      this.track = await trackHandler.getOnKey(
-        this.currentTrackCollection,
-        this.$route.params.id
+      const foundTrack = await trackHandler.getOnKey(
+        this.$route.params.book_id,
+        this.$route.params.track_id
       ); // Getter methods always return full TrackHanlder objects: with meta and methods
 
       // Nothing found => redirect to home
-      if (!this.track.trackKey) {
+      if (!foundTrack.trackKey) {
         console.log("Track not found!");
         this.$router.push({ name: "home" });
         return;
       }
 
-      // Get tag from route
-      const tagId = this.$route.params.tag_id;
-      this.currentTag = this.track.tags
-        ? this.track.tags.find((x) => x.tagKey === tagId)
+      // Set currentTrack
+      this.track = foundTrack;
+
+      // Get tag from route and search in TrackTags on it
+      const foundTag = this.track.tags
+        ? this.track.tags.find((x) => x.tagKey === this.$route.params.tag_id)
         : {};
 
       // Nothing found => do nothing
-      if (!this.currentTag) return;
+      if (!foundTag) return;
+
+      // Set current tag
+      this.currentTag = foundTag;
+      console.log("// Set current tag");
+      console.log(this.currentTag.tagKey);
+      this.showTagEditForm = true;
 
       // open this tag and set start position
       // we cannot start playing on link-load because of browser restriction
-      console.log(this.currentTag.displayName);
-      // ToDo: toggle ManageTag UI
       this.setStartPosition({
         seek: this.currentTag.position,
         duration: this.track.length
@@ -205,6 +263,7 @@ export default {
       console.log(
         `Unexpected error during loading track... Error message: ${error.message}`
       );
+      this.$router.push({ name: "home" });
     }
   }
 };
