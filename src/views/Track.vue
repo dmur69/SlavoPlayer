@@ -1,12 +1,22 @@
 <template>
-  <div>
-    <!-- Music Header -->
-    <section class="w-full mb-8 py-14 text-center text-white relative">
-      <div
-        class="absolute inset-0 w-full h-full box-border bg-contain music-bg"
-        style="background-image: url(/assets/img/song-header.png)"
-      ></div>
-      <div class="container mx-auto flex items-center">
+  <!-- Track info area -->
+  <div
+    class="
+      mx-auto
+      bg-white
+      shadow-md
+      overflow-hidden
+      bg-cover
+      md:bg-contain
+      music-bg
+      text-white
+      container
+      items-center
+    "
+    style="background-image: url(/assets/img/song-header.png)"
+  >
+    <div class="md:flex">
+      <div class="p-4 md:py-8 md:w-48 text-center relative">
         <!-- Play/Pause Button -->
         <button
           id="play-main"
@@ -31,41 +41,223 @@
             }"
           ></i>
         </button>
-        <div class="z-50 text-left ml-8">
+      </div>
+      <div class="m-4 md:my-8 md:flex">
+        <div class="z-50 text-left ml-4 text-lg">
           <!-- Song Info -->
-          <div class="text-xl font-bold">
+          <div class="md:text-xl md:font-bold">
             {{ this.track.bookTitle }} | {{ this.track.subtitle }}
           </div>
-          <div class="text-xl font-bold">
+          <div class="md:text-xl md:font-bold">
             {{ this.track.author }}
           </div>
-          <div class="text-2xl font-bold">
+          <div class="md:text-2xl font-bold">
             Глава {{ this.track.chapter }}: {{ this.track.title }}
           </div>
         </div>
       </div>
-    </section>
-    <!-- Tag management area -->
-    <app-track-tags
-      :parentTrack="track"
-      @tag-click="this.showTagEditForm = true"
-      @add-tag="addTag"
-    />
-    <app-tag-edit-form
-      v-show="showTagEditForm"
-      :currentTag="currentTag"
-      @close-click="showTagEditForm = false"
-      @tag-remove="removeTag"
-      @tag-toggle-mode="handleTagModeChange"
-    />
-    <!-- Form for Comment can be used later for Notes-->
-    <!-- Area below is still static mockup -->
-    <section class="container mx-auto mt-6" id="comments">
+    </div>
+  </div>
+  <!-- Tag management area -->
+  <app-track-tags
+    :parentTrack="track"
+    @tag-click="this.showTagEditForm = true"
+    @add-tag="addTag"
+  />
+  <app-tag-edit-form
+    v-show="showTagEditForm"
+    :currentTag="currentTag"
+    @close-click="showTagEditForm = false"
+    @tag-remove="removeTag"
+    @tag-toggle-mode="handleTagModeChange"
+  />
+  <!-- Expample: Card with defined width -->
+  <!-- <div
+      class="
+        max-w-md
+        mx-auto
+        bg-white
+        rounded-xl
+        shadow-md
+        overflow-hidden
+        md:max-w-2xl
+      "
+    > -->
+  <!-- Example: Pic and Text full with -->
+  <!-- <div class="mx-auto bg-white shadow-md overflow-hidden">
+      <div class="md:flex">
+        <div class="md:flex-shrink-0">
+          <img
+            class="h-48 w-full object-cover md:h-full md:w-48"
+            src="/assets/img/song-header.png"
+            alt="Man looking at item at a store"
+          />
+        </div>
+        <div class="p-8">
+          <div
+            class="
+              uppercase
+              tracking-wide
+              text-sm text-indigo-500
+              font-semibold
+            "
+          >
+            Case study
+          </div>
+          <a
+            href="#"
+            class="
+              block
+              mt-1
+              text-lg
+              leading-tight
+              font-medium
+              text-black
+              hover:underline
+            "
+            >Finding customers for your new business</a
+          >
+          <p class="mt-2 text-gray-500">
+            Getting a new business off the ground is a lot of hard work. Here
+            are five ideas you can use to find your first customers.
+          </p>
+        </div>
+      </div>
+    </div> -->
+  <!-- Example: Text and Text 50% 50% -->
+  <!-- <div class="mx-auto bg-white shadow-md overflow-hidden">
+      <div class="md:flex">
+        <div class="p-8">
+          <div
+            class="
+              uppercase
+              tracking-wide
+              text-sm text-indigo-500
+              font-semibold
+            "
+          >
+            Case study
+          </div>
+          <a
+            href="#"
+            class="
+              block
+              mt-1
+              text-lg
+              leading-tight
+              font-medium
+              text-black
+              hover:underline
+            "
+            >Finding customers for your new business</a
+          >
+          <p class="mt-2 text-gray-500">
+            Getting a new business off the ground is a lot of hard work. Here
+            are five ideas you can use to find your first customers.
+          </p>
+        </div>
+        <div class="p-8">
+          <div
+            class="
+              uppercase
+              tracking-wide
+              text-sm text-indigo-500
+              font-semibold
+            "
+          >
+            Case study
+          </div>
+          <a
+            href="#"
+            class="
+              block
+              mt-1
+              text-lg
+              leading-tight
+              font-medium
+              text-black
+              hover:underline
+            "
+            >Finding customers for your new business</a
+          >
+          <p class="mt-2 text-gray-500">
+            Getting a new business off the ground is a lot of hard work. Here
+            are five ideas you can use to find your first customers.
+          </p>
+        </div>
+      </div>
+    </div> -->
+  <!-- Example: Text and Text mit Begrenzung der linken Spalte ab md -->
+  <!-- <div class="mx-auto bg-white shadow-md overflow-hidden">
+      <div class="md:flex">
+        <div class="p-8 md:w-48">
+          <div
+            class="
+              uppercase
+              tracking-wide
+              text-sm text-indigo-500
+              font-semibold
+            "
+          >
+            Case study
+          </div>
+          <a
+            href="#"
+            class="
+              block
+              mt-1
+              text-lg
+              leading-tight
+              font-medium
+              text-black
+              hover:underline
+            "
+            >Finding customers for your new business</a
+          >
+          <p class="mt-2 text-gray-500">
+            Getting a new business off the ground is a lot of hard work. Here
+            are five ideas you can use to find your first customers.
+          </p>
+        </div>
+        <div class="p-8">
+          <div
+            class="
+              uppercase
+              tracking-wide
+              text-sm text-indigo-500
+              font-semibold
+            "
+          >
+            Case study
+          </div>
+          <a
+            href="#"
+            class="
+              block
+              mt-1
+              text-lg
+              leading-tight
+              font-medium
+              text-black
+              hover:underline
+            "
+            >Finding customers for your new business</a
+          >
+          <p class="mt-2 text-gray-500">
+            Getting a new business off the ground is a lot of hard work. Here
+            are five ideas you can use to find your first customers.
+          </p>
+        </div>
+      </div>
+    </div> -->
+  <!-- Example: Text and Text mit Begrenzung der linken Spalte ab md -->
+  <!-- Form for Comment can be used later for Notes-->
+  <!-- Area below is still static mockup -->
+  <!-- <section class="container mx-auto mt-6" id="comments">
       <div
         class="bg-white rounded border border-gray-200 relative flex flex-col"
       >
         <div class="px-6 pt-6 pb-5 font-bold border-b border-gray-200">
-          <!-- Comment Count -->
           <span class="card-title"
             >Comments (15) / Area below is static mockup</span
           >
@@ -97,7 +289,6 @@
               Submit
             </button>
           </form>
-          <!-- Sort Comments -->
           <select
             class="
               block
@@ -118,15 +309,14 @@
           </select>
         </div>
       </div>
-    </section>
-    <!-- Comments
+    </section> -->
+  <!-- Comments
     Fully skipped Comments handling with:
     Sorting on client side with sort()
     Save current Sort Order in Query Params
     -->
-    <ul class="container mx-auto">
+  <!-- <ul class="container mx-auto">
       <li class="p-6 bg-gray-50 border border-gray-200">
-        <!-- Comment Author -->
         <div class="mb-5">
           <div class="font-bold">Elaine Dreyfuss</div>
           <time>5 mins ago</time>
@@ -137,8 +327,7 @@
           accusantium der doloremque laudantium.
         </p>
       </li>
-    </ul>
-  </div>
+    </ul> -->
 </template>
 
 <script>

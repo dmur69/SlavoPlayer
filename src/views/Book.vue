@@ -3,27 +3,17 @@
     <!-- Introduction -->
     <section class="mb-8 py-20 text-white text-center relative">
       <div
-        class="absolute inset-0 w-full h-full bg-contain introduction-bg"
-        style="background-image: url(assets/img/header.png)"
+        class="absolute inset-0 w-full h-full bg-cover introduction-bg"
+        style="background-image: url(/assets/img/song-header.png)"
       />
       <div class="container mx-auto">
-        <div class="text-white main-header-content">
-          <h1 class="font-bold text-3xl mb-5">
-            "Вникай в себя и в учение; занимайся сим постоянно..." 1Тим.4,16
-          </h1>
-          <p class="w-full md:w-8/12 mx-auto">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus
-            et dolor mollis, congue augue non, venenatis elit. Nunc justo eros,
-            suscipit ac aliquet imperdiet, venenatis et sapien. Duis sed magna
-            pulvinar, fringilla lorem eget, ullamcorper urna.
-          </p>
+        <div class="z-50 text-left ml-8">
+          <!-- Book Info -->
+          <div class="text-3xl md:text-5xl font-bold">
+            Добротолюбие в переводе св. Феофана Затворника
+          </div>
         </div>
       </div>
-
-      <img
-        class="relative block mx-auto mt-5 -mb-20 w-auto max-w-full"
-        src="assets/img/introduction-music.png"
-      />
     </section>
 
     <!-- Main Content -->
@@ -66,7 +56,7 @@ export default {
     return {
       currentBook: "philokalia", // used as default book
       userTracksList: [],
-      maxTracksPerPage: 30
+      maxTracksPerPage: 40
     };
   },
   methods: {

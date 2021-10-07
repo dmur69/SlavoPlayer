@@ -18,5 +18,11 @@ export default {
       console.log(error);
       return 0;
     }
+  },
+
+  stringLimiter(str, count) {
+    if (str.length < count) return str;
+    const s = str.substring(0, count);
+    return `${s}...`;
   }
 };
