@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import { createStore } from "vuex";
 import { Howl } from "howler";
 import helper from "@/includes/helper";
@@ -14,14 +15,24 @@ export default createStore({
       seek: "00:00", // Current postion in sec
       seekPercentage: "0%", // Current position in % for progres bar and ball
       duration: "00:00" // Track full duration
+    },
+    currentPlaylist: {
+      meta: {},
+      trackArray: [],
+      seek: 0 // Index of currentTrack in trackArray
     }
   },
   mutations: {
+    // For Track
     changeCurrentTrack: (state, payload) => {
       state.currentTrack.meta = payload.track;
-      console.log("Current track changed...");
+      console.log("Current track changed...?");
       console.log(payload);
       state.currentTrack.sound = new Howl({
+        // src: [
+        //   "https://azbyka.ru/audio/audio1/knigi/feofan_zatvornik/tom-5/000_Zastavka.mp3",
+        //   "https://azbyka.ru/audio/audio1/knigi/feofan_zatvornik/tom-5/001_Predislovie.mp3"
+        // ],
         src: [payload.track.url], // can contain an array of full urls to play
         html5: true
       });
@@ -29,7 +40,17 @@ export default createStore({
       if (payload.currentTag) {
         state.currentTrack.sound.seek(payload.currentTag.position);
       }
-      console.log(state.currentTrack);
+      // Update also seek in playlist: search in trackArray for currentTrack's index
+      const index = state.currentPlaylist.trackArray
+        ? state.currentPlaylist.trackArray.findIndex(
+            x => x.trackKey === state.currentTrack.meta.trackKey
+          )
+        : state.currentPlaylist.seek;
+      // Change only if something found
+      if (index > 0) {
+        state.currentPlaylist.seek = index;
+      }
+      console.log(`state.currentPlaylist.seek: ${state.currentPlaylist.seek}`);
     },
     setStartTrackPosition(state, payload) {
       state.currentTrack.seek = helper.formatSecToTimerValue(payload.seek);
@@ -44,6 +65,13 @@ export default createStore({
       state.currentTrack.seek = helper.formatSecToTimerValue(seek);
       state.currentTrack.duration = helper.formatSecToTimerValue(duration);
       state.currentTrack.seekPercentage = `${(seek / duration) * 100}%`;
+    },
+    // For Playlist
+    updateCurrentPlaylist: (state, payload) => {
+      state.currentPlaylist.meta = payload.meta;
+      console.log("Current playlist changed...");
+      state.currentPlaylist.trackArray = payload.trackArray;
+      console.log(state.currentPlaylist);
     }
   },
   getters: {
@@ -60,6 +88,23 @@ export default createStore({
         playing = state.currentTrack.sound.playing();
       }
       return playing;
+    },
+    getNextTrack: state => {
+      let track = state.currentTrack;
+      const nextIndex = state.currentPlaylist.seek + 1;
+      if (nextIndex < state.currentPlaylist.trackArray.length) {
+        track = state.currentPlaylist.trackArray[nextIndex];
+      }
+      return track;
+    },
+    getPrevTrack: state => {
+      let track = state.currentTrack;
+      const prevIndex = state.currentPlaylist.seek - 1;
+      if (prevIndex >= 0) {
+        track = state.currentPlaylist.trackArray[prevIndex];
+      }
+      console.log(prevIndex);
+      return track;
     }
   },
   // Action is part of Flux pattern (Facebook alternative to MVC)
@@ -69,13 +114,30 @@ export default createStore({
   // Action is not a model, but "action based business logic"
   actions: {
     // ///////////// TRACK Play Management
+    // >>>>>> The function where with Howl-object sound.play()
+    // and events definition sound.on()
+    async playCurrentTrack({ state, dispatch }) {
+      state.currentTrack.sound.play(); // Start playing Howler.js object
+      // from each url defined on object creation
+      console.log("Start track...");
+
+      // Listen to Howler play event
+      state.currentTrack.sound.on("play", () => {
+        requestAnimationFrame(() => {
+          dispatch("playProgress"); // Kick-off tacking of play progress
+        });
+      });
+
+      // Listen to Howler play event
+      state.currentTrack.sound.on("end", () => {});
+    },
     async setStartPosition({ commit }, payload) {
       console.log("Setting new start position of a track...");
       // commit("changeCurrentTrack", payload);
       commit("setStartTrackPosition", payload); // Mutation of state objects
     },
     // eslint-disable-next-line object-curly-newline
-    async tryPlayNextTrack({ commit, state, dispatch, getters }, payload) {
+    async tryPlaySelectedTrack({ commit, state, dispatch, getters }, payload) {
       console.log("Action called to change playing track...");
       console.log(payload.currentTag);
 
@@ -93,17 +155,27 @@ export default createStore({
       commit("changeCurrentTrack", payload);
       dispatch("playCurrentTrack");
     },
-    async playCurrentTrack({ state, dispatch }) {
-      state.currentTrack.sound.play(); // Start playing Howler.js object
-      // from each url defined on object creation
-      console.log("Start track...");
-
-      // Listen to Howler play event
-      state.currentTrack.sound.on("play", () => {
-        requestAnimationFrame(() => {
-          dispatch("playProgress"); // Kick-off tacking of play progress
-        });
-      });
+    async playNextTrack({ commit, dispatch, getters }) {
+      // Check if current song is already playing
+      if (getters.trackIsPlaying) {
+        dispatch("stopCurrentTrack"); // stop first
+      }
+      // ...then change track and play
+      const payload = { track: getters.getNextTrack };
+      commit("changeCurrentTrack", payload);
+      dispatch("playCurrentTrack");
+      console.log("Start next track...");
+    },
+    async playPrevTrack({ commit, dispatch, getters }) {
+      // Check if current song is already playing
+      if (getters.trackIsPlaying) {
+        dispatch("stopCurrentTrack"); // stop first
+      }
+      // ...then change track and play
+      const payload = { track: getters.getPrevTrack };
+      commit("changeCurrentTrack", payload);
+      dispatch("playCurrentTrack");
+      console.log("Start prev track...");
     },
     async pauseCurrentTrack({ state }) {
       state.currentTrack.sound.pause(); // Start playing Howler.js object
@@ -162,6 +234,9 @@ export default createStore({
       });
       // without this trick updating would stop after seek change
       // we kick it on one more time after a short stop
+    },
+    updatePlaylist({ commit }, payload) {
+      commit("updateCurrentPlaylist", payload);
     }
   }
 });

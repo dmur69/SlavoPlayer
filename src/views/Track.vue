@@ -31,7 +31,7 @@
             rounded-full
             focus:outline-none
           "
-          @click.prevent="tryPlayNextTrack({ track, currentTag })"
+          @click.prevent="tryPlaySelectedTrack({ track, currentTag })"
         >
           <i
             class="fas"
@@ -365,7 +365,7 @@ export default {
     // Play button on Track can be used for both
     // toggle playing (if user stays on the same track)
     // or start new track on change
-    ...mapActions(["tryPlayNextTrack", "setStartPosition"]),
+    ...mapActions(["tryPlaySelectedTrack", "setStartPosition"]),
     addTag(newTag) {
       // Update UI
       this.track.tags.push(newTag);

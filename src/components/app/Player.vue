@@ -10,10 +10,18 @@
       text-left
       align-top
       w-full
-      h-16
+      h-20
     "
   >
     <div class="relative">
+      <div class="flex">
+        <button id="play-next" type="button" @click.prevent="playPrevTrack">
+          <i class="fa text-gray-500 text-xl fa-arrow-left pr-2" />
+        </button>
+        <button id="play-next" type="button" @click.prevent="playNextTrack">
+          <i class="fa text-gray-500 text-xl fa-arrow-right pl-2" />
+        </button>
+      </div>
       <!-- Play/Pause Button -->
       <div class="float-left w-7 h-7 leading-3">
         <button id="play-player" type="button" @click.prevent="togglePlaying">
@@ -43,7 +51,7 @@
       >
         <span class="player-currenttime">{{ currentTrack.seek }}</span>
       </div>
-      <!-- Progress: -->
+      <!-- Progress and Meta -->
       <div class="float-left w-7 h-7 leading-3 ml-7 mt-2 player-scrub">
         <div
           class="
@@ -57,7 +65,7 @@
         >
           <span class="song-title">{{ currentTrack.meta.title }}</span>
           <span v-if="currentTrack.sound.playing"> | </span>
-          <span class="song-artist">{{ currentTrack.meta.user_name }}</span>
+          <span class="song-artist">Глава {{ currentTrack.meta.chapter }}</span>
         </div>
         <!-- Progress: Container  -->
         <!--<<<< HIER we have to listen on Klick-events for track positioning   >>>>-->
@@ -127,7 +135,12 @@ export default {
     ...mapState(["currentTrack"])
   },
   methods: {
-    ...mapActions(["togglePlaying", "updateSeek"])
+    ...mapActions([
+      "togglePlaying",
+      "updateSeek",
+      "playNextTrack",
+      "playPrevTrack"
+    ])
   }
 };
 </script>
