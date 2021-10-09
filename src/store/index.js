@@ -29,10 +29,6 @@ export default createStore({
       console.log("Current track changed...?");
       console.log(payload);
       state.currentTrack.sound = new Howl({
-        // src: [
-        //   "https://azbyka.ru/audio/audio1/knigi/feofan_zatvornik/tom-5/000_Zastavka.mp3",
-        //   "https://azbyka.ru/audio/audio1/knigi/feofan_zatvornik/tom-5/001_Predislovie.mp3"
-        // ],
         src: [payload.track.url], // can contain an array of full urls to play
         html5: true
       });
@@ -129,12 +125,11 @@ export default createStore({
       });
 
       // Listen to Howler play event
-      state.currentTrack.sound.on("end", () => {
-        dispatch("playNextTrack"); // Start playing next song
-      });
+      state.currentTrack.sound.on("end", () => {});
     },
-    async setStartPosition({ commit }, payload) {
+    async setStartPosition({ commit, dispatch }, payload) {
       console.log("Setting new start position of a track...");
+      dispatch("stopCurrentTrack");
       commit("setStartTrackPosition", payload); // Mutation of state objects
     },
     // eslint-disable-next-line object-curly-newline
