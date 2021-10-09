@@ -129,11 +129,12 @@ export default createStore({
       });
 
       // Listen to Howler play event
-      state.currentTrack.sound.on("end", () => {});
+      state.currentTrack.sound.on("end", () => {
+        dispatch("playNextTrack"); // Start playing next song
+      });
     },
     async setStartPosition({ commit }, payload) {
       console.log("Setting new start position of a track...");
-      // commit("changeCurrentTrack", payload);
       commit("setStartTrackPosition", payload); // Mutation of state objects
     },
     // eslint-disable-next-line object-curly-newline
