@@ -128,7 +128,9 @@ export default createStore({
       });
 
       // Listen to Howler play event
-      state.currentTrack.sound.on("end", () => {});
+      state.currentTrack.sound.on("end", () => {
+        dispatch("playNextTrack"); // Start playing next song
+      });
     },
     async changeTrack({ commit, dispatch, getters }, payload) {
       console.log("Action to change current track...");
