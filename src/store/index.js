@@ -1,4 +1,5 @@
 /* eslint-disable indent */
+// eslint-disable-next-line object-curly-newline
 import { createStore } from "vuex";
 import { Howl } from "howler";
 import helper from "@/includes/helper";
@@ -12,7 +13,7 @@ export default createStore({
     currentTrack: {
       meta: {}, // Track meta from DB
       sound: {}, // Howler sound object
-      seek: "00:00", // Current postion in sec
+      seek: 0, // Current postion in sec
       seekPercentage: "0%", // Current position in % for progres bar and ball
       duration: "00:00" // Track full duration
     },
@@ -25,17 +26,26 @@ export default createStore({
   mutations: {
     // For Track
     changeCurrentTrack: (state, payload) => {
+      console.log(payload);
+      console.log(state);
       state.currentTrack.meta = payload.track;
       console.log("Current track changed...?");
-      console.log(payload);
       state.currentTrack.sound = new Howl({
         src: [payload.track.url], // can contain an array of full urls to play
         html5: true
       });
-      // Start playing from position of the current tag
+
+      // Set current start playing position from position of the current tag
       if (payload.currentTag) {
-        state.currentTrack.sound.seek(payload.currentTag.position);
+        const seek = payload.currentTag.position;
+        const duration = payload.track.length;
+        state.currentTrack.seek = helper.formatSecToTimerValue(seek);
+        state.currentTrack.duration = duration; // helper.formatSecToTimerValue();
+        state.currentTrack.seekPercentage = `${(seek /
+          helper.formatTimerValueToSec(duration)) *
+          100}%`;
       }
+
       // Update also seek in playlist: search in trackArray for currentTrack's index
       const index = state.currentPlaylist.trackArray
         ? state.currentPlaylist.trackArray.findIndex(
@@ -47,13 +57,6 @@ export default createStore({
         state.currentPlaylist.seek = index;
       }
       console.log(`state.currentPlaylist.seek: ${state.currentPlaylist.seek}`);
-    },
-    setStartTrackPosition(state, payload) {
-      state.currentTrack.seek = helper.formatSecToTimerValue(payload.seek);
-      state.currentTrack.duration = payload.duration; // helper.formatSecToTimerValue();
-      state.currentTrack.seekPercentage = `${(payload.seek /
-        helper.formatTimerValueToSec(payload.duration)) *
-        100}%`;
     },
     updateTrackPosition(state) {
       const seek = state.currentTrack.sound.seek();
@@ -127,29 +130,14 @@ export default createStore({
       // Listen to Howler play event
       state.currentTrack.sound.on("end", () => {});
     },
-    async setStartPosition({ commit, dispatch }, payload) {
-      console.log("Setting new start position of a track...");
-      dispatch("stopCurrentTrack");
-      commit("setStartTrackPosition", payload); // Mutation of state objects
-    },
-    // eslint-disable-next-line object-curly-newline
-    async tryPlaySelectedTrack({ commit, state, dispatch, getters }, payload) {
-      console.log("Action called to change playing track...");
-      console.log(payload.currentTag);
-
-      // Nothing to change. User just wants to toggle playing
-      if (state.currentTrack.meta.trackKey === payload.track.trackKey) {
-        dispatch("togglePlaying");
-        return;
-      }
-
+    async changeTrack({ commit, dispatch, getters }, payload) {
+      console.log("Action to change current track...");
       // Check if current song is already playing
       if (getters.trackIsPlaying) {
         dispatch("stopCurrentTrack"); // stop first
       }
-      // ...then change track and play
+      // ...then change track
       commit("changeCurrentTrack", payload);
-      dispatch("playCurrentTrack");
     },
     async playNextTrack({ commit, dispatch, getters }) {
       // Check if current song is already playing
@@ -173,16 +161,6 @@ export default createStore({
       dispatch("playCurrentTrack");
       console.log("Start prev track...");
     },
-    async pauseCurrentTrack({ state }) {
-      state.currentTrack.sound.pause(); // Start playing Howler.js object
-      // from each url defined on object creation
-      console.log("Pause track...");
-    },
-    async stopCurrentTrack({ state }) {
-      state.currentTrack.sound.stop(); // Start playing Howler.js object
-      // from each url defined on object creation
-      console.log("Stop track...");
-    },
     async togglePlaying({ dispatch, getters }) {
       // Check if current song is already playing
       if (getters.trackIsPlaying) {
@@ -190,6 +168,18 @@ export default createStore({
       } else {
         dispatch("playCurrentTrack");
       }
+    },
+    async pauseCurrentTrack({ state }) {
+      state.currentTrack.sound.pause(); // Start playing Howler.js object
+      // from each url defined on object creation
+      console.log("Pause track...");
+    },
+    async stopCurrentTrack({ state }) {
+      state.currentTrack.sound.stop(); // Start playing Howler.js object
+      state.currentTrack.seek = 0;
+      state.currentTrack.duration = "00:00"; // helper.formatSecToTimerValue();
+      state.currentTrack.seekPercentage = "0%";
+      console.log("Stop track...");
     },
     // Constantly updates progress information: playing progress
     playProgress({ commit, state, dispatch }) {
