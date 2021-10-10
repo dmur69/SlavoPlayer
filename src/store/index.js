@@ -115,7 +115,7 @@ export default createStore({
     // ///////////// TRACK Play Management
     // >>>>>> The function where with Howl-object sound.play()
     // and events definition sound.on()
-    async playCurrentTrack({ state, dispatch }) {
+    playCurrentTrack({ state, dispatch }) {
       state.currentTrack.sound.play(); // Start playing Howler.js object
       // from each url defined on object creation
       console.log("Start track...");
@@ -132,7 +132,7 @@ export default createStore({
         dispatch("playNextTrack"); // Start playing next song
       });
     },
-    async changeTrack({ commit, dispatch, getters }, payload) {
+    changeTrack({ commit, dispatch, getters }, payload) {
       console.log("Action to change current track...");
       // Check if current song is already playing
       if (getters.trackIsPlaying) {
@@ -141,7 +141,7 @@ export default createStore({
       // ...then change track
       commit("changeCurrentTrack", payload);
     },
-    async playNextTrack({ commit, dispatch, getters }) {
+    playNextTrack({ commit, dispatch, getters }) {
       // Check if current song is already playing
       if (getters.trackIsPlaying) {
         dispatch("stopCurrentTrack"); // stop first
@@ -152,7 +152,7 @@ export default createStore({
       dispatch("playCurrentTrack");
       console.log("Start next track...");
     },
-    async playPrevTrack({ commit, dispatch, getters }) {
+    playPrevTrack({ commit, dispatch, getters }) {
       // Check if current song is already playing
       if (getters.trackIsPlaying) {
         dispatch("stopCurrentTrack"); // stop first
@@ -163,7 +163,7 @@ export default createStore({
       dispatch("playCurrentTrack");
       console.log("Start prev track...");
     },
-    async togglePlaying({ dispatch, getters }) {
+    togglePlaying({ dispatch, getters }) {
       // Check if current song is already playing
       if (getters.trackIsPlaying) {
         dispatch("pauseCurrentTrack");
@@ -171,12 +171,12 @@ export default createStore({
         dispatch("playCurrentTrack");
       }
     },
-    async pauseCurrentTrack({ state }) {
+    pauseCurrentTrack({ state }) {
       state.currentTrack.sound.pause(); // Start playing Howler.js object
       // from each url defined on object creation
       console.log("Pause track...");
     },
-    async stopCurrentTrack({ state }) {
+    stopCurrentTrack({ state }) {
       state.currentTrack.sound.stop(); // Start playing Howler.js object
       state.currentTrack.seek = 0;
       state.currentTrack.duration = "00:00"; // helper.formatSecToTimerValue();
