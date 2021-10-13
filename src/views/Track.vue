@@ -59,12 +59,12 @@
     </div>
   </div>
   <!-- Tag management area -->
-  <app-track-tags
+  <app-track-tags-list
     :parentTrack="track"
     @tag-click="this.showTagEditForm = true"
     @add-tag="addTag"
   />
-  <app-tag-edit-form
+  <app-tag-edit
     v-show="showTagEditForm"
     :currentTag="currentTag"
     @close-click="showTagEditForm = false"
@@ -77,8 +77,9 @@
 import TrackHandler from "@/handlerobj/track";
 import TagHandler from "@/handlerobj/tag";
 import { mapActions, mapGetters } from "vuex";
-import AppTrackTags from "@/components/track/TrackTagListEdit.vue";
-import AppTagEditForm from "@/components/track/TagSingleEdit.vue";
+import AppTrackTagsList from "@/components/track/TrackTagsList.vue";
+// eslint-disable-next-line import/no-unresolved
+import AppTagEdit from "@/components/track/TagEdit.vue";
 
 export default {
   name: "Track",
@@ -89,7 +90,7 @@ export default {
       showTagEditForm: false
     };
   },
-  components: { AppTrackTags, AppTagEditForm },
+  components: { AppTrackTagsList, AppTagEdit },
   computed: {
     ...mapGetters(["trackIsPlaying"])
     // it's better to map entire object at once!
