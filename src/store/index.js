@@ -39,11 +39,16 @@ export default createStore({
       if (payload.currentTag) {
         const seek = payload.currentTag.position;
         const duration = payload.track.length;
+
+        // Mutate values for displaying progress
         state.currentTrack.seek = helper.formatSecToTimerValue(seek);
         state.currentTrack.duration = duration; // helper.formatSecToTimerValue();
         state.currentTrack.seekPercentage = `${(seek /
           helper.formatTimerValueToSec(duration)) *
           100}%`;
+
+        // Set actual position in Howler player
+        state.currentTrack.sound.seek(seek);
       }
 
       // Update also seek in playlist: search in trackArray for currentTrack's index
