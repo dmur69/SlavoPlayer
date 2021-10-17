@@ -38,16 +38,20 @@ export default createStore({
 
       // Set current start playing position from position of the current tag
       if (payload.currentTag) {
-        const seek = payload.currentTag.position;
+        // Only change start time, if tag is in Bookmark mode
+        // Information is still saved => do not show it by Design
+        if (payload.currentTag.isBookmarked) {
+          const seek = payload.currentTag.position;
 
-        // Mutate values for displaying progress
-        state.currentTrack.seek = helper.formatSecToTimerValue(seek);
-        state.currentTrack.seekPercentage = `${(seek /
-          helper.formatTimerValueToSec(state.currentTrack.duration)) *
-          100}%`;
+          // Mutate values for displaying progress
+          state.currentTrack.seek = helper.formatSecToTimerValue(seek);
+          state.currentTrack.seekPercentage = `${(seek /
+            helper.formatTimerValueToSec(state.currentTrack.duration)) *
+            100}%`;
 
-        // Set actual position in Howler player
-        state.currentTrack.sound.seek(seek);
+          // Set actual position in Howler player
+          state.currentTrack.sound.seek(seek);
+        }
       }
 
       // Update also seek in playlist: search in trackArray for currentTrack's index

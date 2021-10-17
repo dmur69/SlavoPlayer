@@ -29,8 +29,7 @@
             border border-gray-300
             transition
             duration-500
-            focus:outline-none
-            focus:border-black
+            focus:outline-none focus:border-black
             rounded
             cursor-pointer
           "
@@ -105,7 +104,11 @@ export default {
       console.log("Loading TagEditForm via route call");
       this.$router.push({
         name: "track_tag",
-        params: { id: this.parentTrack.trackKey, tag_id: clickedTag.tagKey }
+        params: {
+          book_id: this.parentTrack.bookKey,
+          track_id: this.parentTrack.trackKey,
+          tag_id: this.currentTagKey
+        }
       });
     },
     // Toggles dropdown for adding new tags and performs other actions

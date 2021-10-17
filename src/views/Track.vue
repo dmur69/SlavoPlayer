@@ -105,7 +105,7 @@ export default {
     // }
   },
   methods: {
-    ...mapActions(["changeTrack", "togglePlaying"]),
+    ...mapActions(["changeTrack", "togglePlaying", "stopCurrentTrack"]),
     addTag(newTag) {
       this.track.tags.push(newTag); // Update UI
       this.currentTag = newTag; // Set as current tag
@@ -129,16 +129,27 @@ export default {
       // ToDo: user can also remove tag bookmark without removing tag
 
       await this.track.update(); // Update in db
-      // Redirect to track page without tag ui after successful update
+      // Redirect to track page without tag UI after successful update
       this.$router.push({
         name: "track",
         params: { book_id: this.track.bookKey, track_id: this.track.trackKey }
       });
     },
-    handleTagModeChange() {
+    async handleTagModeChange() {
       console.log("// ToDo: add and remove Bookmark objects");
       // console.log(this.currentTag);
       this.currentTag.isBookmarked = !this.currentTag.isBookmarked;
+
+      // Reset start track position
+      console.log("Reset start track position");
+      if (this.currentTag.isBookmarked) {
+        this.changeTrack({
+          track: this.track,
+          currentTag: this.currentTag
+        });
+      } else {
+        this.stopCurrentTrack();
+      }
 
       // Update in db
       this.track.update();
@@ -188,11 +199,6 @@ export default {
         track: this.track,
         currentTag: this.currentTag
       });
-
-      // this.setStartPosition({
-      //   seek: this.currentTag.position,
-      //   duration: this.track.length
-      // });
     } catch (error) {
       console.log(
         `Unexpected error during loading track... Error message: ${error.message}`
