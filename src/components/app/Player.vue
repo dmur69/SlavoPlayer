@@ -14,6 +14,7 @@
     "
   >
     <div class="relative">
+      <!-- Next & Back Button -->
       <div class="flex">
         <button id="play-next" type="button" @click.prevent="playPrevTrack">
           <i class="fa text-gray-500 text-4xl fa-arrow-alt-circle-left pr-2" />

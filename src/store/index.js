@@ -13,7 +13,7 @@ export default createStore({
     currentTrack: {
       meta: {}, // Track meta from DB
       sound: {}, // Howler sound object
-      seek: 0, // Current postion in sec
+      seek: "00:00", // Current postion in sec
       seekPercentage: "0%", // Current position in % for progres bar and ball
       duration: "00:00" // Track full duration
     },
@@ -34,17 +34,16 @@ export default createStore({
         src: [payload.track.url], // can contain an array of full urls to play
         html5: true
       });
+      state.currentTrack.duration = payload.track.length;
 
       // Set current start playing position from position of the current tag
       if (payload.currentTag) {
         const seek = payload.currentTag.position;
-        const duration = payload.track.length;
 
         // Mutate values for displaying progress
         state.currentTrack.seek = helper.formatSecToTimerValue(seek);
-        state.currentTrack.duration = duration; // helper.formatSecToTimerValue();
         state.currentTrack.seekPercentage = `${(seek /
-          helper.formatTimerValueToSec(duration)) *
+          helper.formatTimerValueToSec(state.currentTrack.duration)) *
           100}%`;
 
         // Set actual position in Howler player
@@ -183,8 +182,8 @@ export default createStore({
     },
     stopCurrentTrack({ state }) {
       state.currentTrack.sound.stop(); // Start playing Howler.js object
-      state.currentTrack.seek = 0;
-      state.currentTrack.duration = "00:00"; // helper.formatSecToTimerValue();
+      state.currentTrack.seek = "00:00";
+      state.currentTrack.duration = "00:00";
       state.currentTrack.seekPercentage = "0%";
       console.log("Stop track...");
     },
