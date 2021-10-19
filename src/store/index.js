@@ -1,4 +1,5 @@
 /* eslint-disable indent */
+// eslint-disable-next-line object-curly-newline
 import { createStore } from "vuex";
 import { Howl } from "howler";
 import helper from "@/includes/helper";
@@ -25,21 +26,34 @@ export default createStore({
   mutations: {
     // For Track
     changeCurrentTrack: (state, payload) => {
+      console.log(payload);
+      console.log(state);
       state.currentTrack.meta = payload.track;
       console.log("Current track changed...?");
-      console.log(payload);
       state.currentTrack.sound = new Howl({
-        // src: [
-        //   "https://azbyka.ru/audio/audio1/knigi/feofan_zatvornik/tom-5/000_Zastavka.mp3",
-        //   "https://azbyka.ru/audio/audio1/knigi/feofan_zatvornik/tom-5/001_Predislovie.mp3"
-        // ],
         src: [payload.track.url], // can contain an array of full urls to play
         html5: true
       });
-      // Start playing from position of the current tag
+      state.currentTrack.duration = payload.track.length;
+
+      // Set current start playing position from position of the current tag
       if (payload.currentTag) {
-        state.currentTrack.sound.seek(payload.currentTag.position);
+        // Only change start time, if tag is in Bookmark mode
+        // Information is still saved => do not show it by Design
+        if (payload.currentTag.isBookmarked) {
+          const seek = payload.currentTag.position;
+
+          // Mutate values for displaying progress
+          state.currentTrack.seek = helper.formatSecToTimerValue(seek);
+          state.currentTrack.seekPercentage = `${(seek /
+            helper.formatTimerValueToSec(state.currentTrack.duration)) *
+            100}%`;
+
+          // Set actual position in Howler player
+          state.currentTrack.sound.seek(seek);
+        }
       }
+
       // Update also seek in playlist: search in trackArray for currentTrack's index
       const index = state.currentPlaylist.trackArray
         ? state.currentPlaylist.trackArray.findIndex(
@@ -51,13 +65,6 @@ export default createStore({
         state.currentPlaylist.seek = index;
       }
       console.log(`state.currentPlaylist.seek: ${state.currentPlaylist.seek}`);
-    },
-    setStartTrackPosition(state, payload) {
-      state.currentTrack.seek = helper.formatSecToTimerValue(payload.seek);
-      state.currentTrack.duration = payload.duration; // helper.formatSecToTimerValue();
-      state.currentTrack.seekPercentage = `${(payload.seek /
-        helper.formatTimerValueToSec(payload.duration)) *
-        100}%`;
     },
     updateTrackPosition(state) {
       const seek = state.currentTrack.sound.seek();
@@ -116,7 +123,7 @@ export default createStore({
     // ///////////// TRACK Play Management
     // >>>>>> The function where with Howl-object sound.play()
     // and events definition sound.on()
-    async playCurrentTrack({ state, dispatch }) {
+    playCurrentTrack({ state, dispatch }) {
       state.currentTrack.sound.play(); // Start playing Howler.js object
       // from each url defined on object creation
       console.log("Start track...");
@@ -133,30 +140,16 @@ export default createStore({
         dispatch("playNextTrack"); // Start playing next song
       });
     },
-    async setStartPosition({ commit }, payload) {
-      console.log("Setting new start position of a track...");
-      commit("setStartTrackPosition", payload); // Mutation of state objects
-    },
-    // eslint-disable-next-line object-curly-newline
-    async tryPlaySelectedTrack({ commit, state, dispatch, getters }, payload) {
-      console.log("Action called to change playing track...");
-      console.log(payload.currentTag);
-
-      // Nothing to change. User just wants to toggle playing
-      if (state.currentTrack.meta.trackKey === payload.track.trackKey) {
-        dispatch("togglePlaying");
-        return;
-      }
-
+    changeTrack({ commit, dispatch, getters }, payload) {
+      console.log("Action to change current track...");
       // Check if current song is already playing
       if (getters.trackIsPlaying) {
         dispatch("stopCurrentTrack"); // stop first
       }
-      // ...then change track and play
+      // ...then change track
       commit("changeCurrentTrack", payload);
-      dispatch("playCurrentTrack");
     },
-    async playNextTrack({ commit, dispatch, getters }) {
+    playNextTrack({ commit, dispatch, getters }) {
       // Check if current song is already playing
       if (getters.trackIsPlaying) {
         dispatch("stopCurrentTrack"); // stop first
@@ -167,7 +160,7 @@ export default createStore({
       dispatch("playCurrentTrack");
       console.log("Start next track...");
     },
-    async playPrevTrack({ commit, dispatch, getters }) {
+    playPrevTrack({ commit, dispatch, getters }) {
       // Check if current song is already playing
       if (getters.trackIsPlaying) {
         dispatch("stopCurrentTrack"); // stop first
@@ -178,23 +171,25 @@ export default createStore({
       dispatch("playCurrentTrack");
       console.log("Start prev track...");
     },
-    async pauseCurrentTrack({ state }) {
-      state.currentTrack.sound.pause(); // Start playing Howler.js object
-      // from each url defined on object creation
-      console.log("Pause track...");
-    },
-    async stopCurrentTrack({ state }) {
-      state.currentTrack.sound.stop(); // Start playing Howler.js object
-      // from each url defined on object creation
-      console.log("Stop track...");
-    },
-    async togglePlaying({ dispatch, getters }) {
+    togglePlaying({ dispatch, getters }) {
       // Check if current song is already playing
       if (getters.trackIsPlaying) {
         dispatch("pauseCurrentTrack");
       } else {
         dispatch("playCurrentTrack");
       }
+    },
+    pauseCurrentTrack({ state }) {
+      state.currentTrack.sound.pause(); // Start playing Howler.js object
+      // from each url defined on object creation
+      console.log("Pause track...");
+    },
+    stopCurrentTrack({ state }) {
+      state.currentTrack.sound.stop(); // Start playing Howler.js object
+      state.currentTrack.seek = "00:00";
+      state.currentTrack.duration = "00:00";
+      state.currentTrack.seekPercentage = "0%";
+      console.log("Stop track...");
     },
     // Constantly updates progress information: playing progress
     playProgress({ commit, state, dispatch }) {

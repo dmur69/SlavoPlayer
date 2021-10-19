@@ -10,16 +10,17 @@
       text-left
       align-top
       w-full
-      h-20
+      h-30
     "
   >
     <div class="relative">
+      <!-- Next & Back Button -->
       <div class="flex">
         <button id="play-next" type="button" @click.prevent="playPrevTrack">
-          <i class="fa text-gray-500 text-xl fa-arrow-left pr-2" />
+          <i class="fa text-gray-500 text-4xl fa-arrow-alt-circle-left pr-2" />
         </button>
         <button id="play-next" type="button" @click.prevent="playNextTrack">
-          <i class="fa text-gray-500 text-xl fa-arrow-right pl-2" />
+          <i class="fa text-gray-500 text-4xl fa-arrow-alt-circle-right pl-2" />
         </button>
       </div>
       <!-- Play/Pause Button -->
