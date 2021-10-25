@@ -13,9 +13,8 @@ a:hover {
   fill: #f59e0b !important;
 }
 
-.player-scrub,
-.player-song-info {
-  width: calc(100% - 250px);
+.player-scrub {
+  width: calc(100% - 20px);
 }
 
 .top-neg-8 {
@@ -146,7 +145,7 @@ input[type="file"] {
    with position:fixed. Width, height, top and left speak
    for themselves. Background we set to 80% white with
    our animation centered, and no-repeating */
-.sp-block-ui {
+.sp-modal {
   display: block;
   overflow: hidden;
   position: fixed;
