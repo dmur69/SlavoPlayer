@@ -145,7 +145,7 @@ input[type="file"] {
    with position:fixed. Width, height, top and left speak
    for themselves. Background we set to 80% white with
    our animation centered, and no-repeating */
-.sp-modal {
+.sp-block-ui {
   display: block;
   overflow: hidden;
   position: fixed;
@@ -155,9 +155,4 @@ input[type="file"] {
   height: 100%;
   width: 100%;
   background: rgba(255, 255, 255, 0.8) url("slavo-loader.gif") 50% 50% no-repeat;
-}
-
-.blockUI {
-  overflow: hidden;
-  display: block;
 }

@@ -94,17 +94,10 @@ export default {
   },
   components: { AppTrackTagsList, AppTagEdit },
   computed: {
-    ...mapGetters(["trackIsPlaying", "trackIsLoading"])
-    // it's better to map entire object at once!
-    // ...mapState(["currentTrack"]),
-    // Specific case: show play symbol to start next track
-    // even if some other track is already running
-    // myTrackIsPlaying() {
-    //   return (
-    //     this.trackIsPlaying &&
-    //     this.currentTrack.meta.trackKey === this.track.trackKey
-    //   );
-    // }
+    ...mapGetters(["trackIsPlaying", "trackIsLoading"]),
+    fullTitle() {
+      return `${this.track.bookTitle} | ${this.track.subtitle} | Глава ${this.track.chapter}: ${this.track.title}`;
+    }
   },
   methods: {
     ...mapActions(["changeTrack", "togglePlaying", "stopCurrentTrack"]),
@@ -176,6 +169,7 @@ export default {
 
       // Set currentTrack
       this.track = foundTrack;
+      document.title = this.fullTitle;
 
       // Get tag from route and search in TrackTags on it
       const foundTag = this.track.tags
@@ -207,6 +201,9 @@ export default {
       );
       this.$router.push({ name: "home" });
     }
+  },
+  mounted() {
+    // this.fullTitle;
   }
 };
 </script>
