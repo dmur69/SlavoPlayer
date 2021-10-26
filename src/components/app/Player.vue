@@ -4,7 +4,12 @@
       <!-- Buttons -->
       <div class="flex justify-center text-gray-500 text-3xl m-5">
         <!-- Play/Pause -->
-        <button id="play-next" type="button" @click.prevent="playPrevTrack">
+        <button
+          id="play-next"
+          v-if="currentPlaylist.seek"
+          type="button"
+          @click.prevent="playPrevTrack"
+        >
           <i class="fa fa-fast-backward" />
         </button>
         <!-- Back Button -->
@@ -18,7 +23,12 @@
           />
         </button>
         <!-- Next Button -->
-        <button id="play-next" type="button" @click.prevent="playNextTrack">
+        <button
+          id="play-next"
+          v-if="currentPlaylist.seek"
+          type="button"
+          @click.prevent="playNextTrack"
+        >
           <i class="fa fa-fast-forward" />
         </button>
       </div>
@@ -77,7 +87,7 @@ export default {
   name: "Player",
   computed: {
     ...mapGetters(["trackIsPlaying"]),
-    ...mapState(["currentTrack"])
+    ...mapState(["currentTrack", "currentPlaylist"])
   },
   methods: {
     ...mapActions([
