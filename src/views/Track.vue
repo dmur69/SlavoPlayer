@@ -71,6 +71,8 @@
     @tag-remove="removeTag"
     @tag-toggle-mode="handleTagModeChange"
   />
+  <!-- BlockUI while getting track data -->
+  <div v-if="trackIsLoading" class="sp-block-ui"></div>
 </template>
 
 <script>
@@ -92,7 +94,7 @@ export default {
   },
   components: { AppTrackTagsList, AppTagEdit },
   computed: {
-    ...mapGetters(["trackIsPlaying"])
+    ...mapGetters(["trackIsPlaying", "trackIsLoading"])
     // it's better to map entire object at once!
     // ...mapState(["currentTrack"]),
     // Specific case: show play symbol to start next track

@@ -6,8 +6,8 @@
     <!-- Page contens via vue router -->
     <router-view :key="$route.fullPath"></router-view>
 
-    <!-- Player with all advanced features -->
-    <app-player />
+    <!-- Sticky Player at the bottom -->
+    <app-player v-if="this.$store.state.currentTrack.meta.trackKey" />
 
     <!-- Modal Login and Registration Form -->
     <auth-modal />

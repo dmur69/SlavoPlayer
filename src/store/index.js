@@ -15,7 +15,8 @@ export default createStore({
       sound: {}, // Howler sound object
       seek: "00:00", // Current postion in sec
       seekPercentage: "0%", // Current position in % for progres bar and ball
-      duration: "00:00" // Track full duration
+      duration: "00:00", // Track full duration
+      isLoading: false // Loading track from db, used for blockUI
     },
     currentPlaylist: {
       meta: {},
@@ -73,6 +74,11 @@ export default createStore({
       state.currentTrack.duration = helper.formatSecToTimerValue(duration);
       state.currentTrack.seekPercentage = `${(seek / duration) * 100}%`;
     },
+    updateLoadingState(state, payload) {
+      state.currentTrack.isLoading = payload;
+      console.log("state.currentTrack.isLoading");
+      console.log(state.currentTrack.isLoading);
+    },
     // For Playlist
     updateCurrentPlaylist: (state, payload) => {
       state.currentPlaylist.meta = payload.meta;
@@ -96,6 +102,7 @@ export default createStore({
       }
       return playing;
     },
+    trackIsLoading: state => state.currentTrack.isLoading,
     getNextTrack: state => {
       let track = state.currentTrack;
       const nextIndex = state.currentPlaylist.seek + 1;
@@ -123,7 +130,8 @@ export default createStore({
     // ///////////// TRACK Play Management
     // >>>>>> The function where with Howl-object sound.play()
     // and events definition sound.on()
-    playCurrentTrack({ state, dispatch }) {
+    playCurrentTrack({ state, dispatch, commit }) {
+      commit("updateLoadingState", true);
       state.currentTrack.sound.play(); // Start playing Howler.js object
       // from each url defined on object creation
       console.log("Start track...");
@@ -131,6 +139,7 @@ export default createStore({
       // Listen to Howler play event
       state.currentTrack.sound.on("play", () => {
         requestAnimationFrame(() => {
+          commit("updateLoadingState", false); // Loading done
           dispatch("playProgress"); // Kick-off tacking of play progress
         });
       });
