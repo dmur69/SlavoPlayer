@@ -98,7 +98,6 @@ export default {
       return this.track.tags.filter((t) => t.isBookmarked === true);
     },
     anyTags() {
-      console.log(this.track.tags.length);
       return this.track.tags.length > 0;
     },
     title() {

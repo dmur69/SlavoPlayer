@@ -40,6 +40,7 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 import TrackHandler from "@/handlerobj/track";
 import AppTrackToPlay from "../components/home/TrackToPlay.vue";
 
@@ -60,6 +61,7 @@ export default {
     };
   },
   methods: {
+    ...mapActions(["updatePlaylist"]),
     // ///// Function called on certain scroll position to infinite scroll on tracks
     async getTracks(collectionName) {
       let tracksMetaArray = [];
@@ -101,6 +103,11 @@ export default {
           `Error while quering tracks from database: ${error.message}`
         );
       }
+      // Call action from state object
+      this.updatePlaylist({
+        meta: this.currentBook,
+        trackArray: this.userTracksList
+      });
       return tracksMetaArray.length;
     },
     // ///// Handler methods

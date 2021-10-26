@@ -1,3 +1,5 @@
+<!-- Name convention: TagEdit not TrackTag...
+because it can be seen as DIRECT sub component of Track.vue | for Tag entity -->
 <template>
   <section class="container mx-auto mt-6">
     <div class="bg-white rounded border border-gray-200 relative flex flex-col">
@@ -67,7 +69,7 @@
 
 <script>
 export default {
-  name: "TagEditForm",
+  name: "TagEdit",
   props: {
     currentTag: {
       type: Object, // Tag object

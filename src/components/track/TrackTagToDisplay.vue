@@ -24,7 +24,7 @@
 
 <script>
 export default {
-  name: "TagToDisplay",
+  name: "TrackTagToDisplay",
   props: {
     tag: {
       type: Object, // Tag object

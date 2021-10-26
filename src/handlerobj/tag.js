@@ -6,9 +6,9 @@ class TagHandler {
   constructor(tag) {
     this.displayName = tag;
     this.tagKey = this.generateKeyFromTitle(tag);
-    this.sysTag = true;
-    this.isBookmarked = true;
-    this.position = 0;
+    this.sysTag = true; // has to be explicetely unset if needed on the track level
+    this.isBookmarked = true; // has to be explicetely unset if needed on the track level
+    this.position = 0; // has to be explicetely set if needed on the track level
     this.tagMapper = new TagMapper(this.getMeta());
   }
 

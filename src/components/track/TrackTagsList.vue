@@ -1,6 +1,7 @@
 <template>
   <section class="container mx-auto mt-6" id="tags">
     <div class="md:grid md:grid-cols-4 md:gap-4">
+      <!-- Drop-down with all available tags. Hidden on load. -->
       <div id="tagsDropdown" class="dropdown-content">
         <input
           type="text"
@@ -9,14 +10,16 @@
           v-on:keyup.enter="createNewTag"
           v-on:keyup="filterTags"
         />
-        <app-tag-to-select
+        <app-track-tag-to-select
           @tag-add="addNewTag"
           v-for="tag in allTags"
           :key="tag.tagKey"
           :tag="tag"
         />
       </div>
+      <!-- List of already added tags with button to add new tag -->
       <div class="col-span-4">
+        <!-- Button to add new tag (toggle hidden drop-down) -->
         <span
           class="
             w-full
@@ -26,8 +29,7 @@
             border border-gray-300
             transition
             duration-500
-            focus:outline-none
-            focus:border-black
+            focus:outline-none focus:border-black
             rounded
             cursor-pointer
           "
@@ -35,7 +37,8 @@
           @click="handleTagDropDownClick"
           >+</span
         >
-        <app-tag-to-display
+        <!-- List of tag buttons / current can be selected on click -->
+        <app-track-tag-to-display
           v-for="tag in parentTrack.tags"
           :key="tag.tagKey"
           :tag="tag"
@@ -48,8 +51,8 @@
 </template>
 
 <script>
-import AppTagToSelect from "@/components/track/TrackTagToSelect.vue";
-import AppTagToDisplay from "@/components/track/TrackTagToDisplay.vue";
+import AppTrackTagToSelect from "@/components/track/TrackTagToSelect.vue";
+import AppTrackTagToDisplay from "@/components/track/TrackTagToDisplay.vue";
 import TagHandler from "@/handlerobj/tag";
 import { mapGetters } from "vuex";
 
@@ -62,8 +65,8 @@ both (on track and the global list of tags in db)
 TODO: edit,delete,user tags, system tags
 */
 export default {
-  name: "TrackTags",
-  components: { AppTagToSelect, AppTagToDisplay },
+  name: "TrackTagsList",
+  components: { AppTrackTagToSelect, AppTrackTagToDisplay },
   data() {
     return {
       savedTrackPosition: 0,
@@ -101,7 +104,11 @@ export default {
       console.log("Loading TagEditForm via route call");
       this.$router.push({
         name: "track_tag",
-        params: { id: this.parentTrack.trackKey, tag_id: clickedTag.tagKey }
+        params: {
+          book_id: this.parentTrack.bookKey,
+          track_id: this.parentTrack.trackKey,
+          tag_id: this.currentTagKey
+        }
       });
     },
     // Toggles dropdown for adding new tags and performs other actions

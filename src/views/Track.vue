@@ -31,13 +31,13 @@
             rounded-full
             focus:outline-none
           "
-          @click.prevent="tryPlayNextTrack({ track, currentTag })"
+          @click.prevent="togglePlaying"
         >
           <i
             class="fas"
             :class="{
-              'fa-play': !myTrackIsPlaying,
-              'fa-pause': myTrackIsPlaying
+              'fa-play': !trackIsPlaying,
+              'fa-pause': trackIsPlaying
             }"
           ></i>
         </button>
@@ -59,283 +59,29 @@
     </div>
   </div>
   <!-- Tag management area -->
-  <app-track-tags
+  <app-track-tags-list
     :parentTrack="track"
     @tag-click="this.showTagEditForm = true"
     @add-tag="addTag"
   />
-  <app-tag-edit-form
+  <app-tag-edit
     v-show="showTagEditForm"
     :currentTag="currentTag"
     @close-click="showTagEditForm = false"
     @tag-remove="removeTag"
     @tag-toggle-mode="handleTagModeChange"
   />
-  <!-- Expample: Card with defined width -->
-  <!-- <div
-      class="
-        max-w-md
-        mx-auto
-        bg-white
-        rounded-xl
-        shadow-md
-        overflow-hidden
-        md:max-w-2xl
-      "
-    > -->
-  <!-- Example: Pic and Text full with -->
-  <!-- <div class="mx-auto bg-white shadow-md overflow-hidden">
-      <div class="md:flex">
-        <div class="md:flex-shrink-0">
-          <img
-            class="h-48 w-full object-cover md:h-full md:w-48"
-            src="/assets/img/song-header.png"
-            alt="Man looking at item at a store"
-          />
-        </div>
-        <div class="p-8">
-          <div
-            class="
-              uppercase
-              tracking-wide
-              text-sm text-indigo-500
-              font-semibold
-            "
-          >
-            Case study
-          </div>
-          <a
-            href="#"
-            class="
-              block
-              mt-1
-              text-lg
-              leading-tight
-              font-medium
-              text-black
-              hover:underline
-            "
-            >Finding customers for your new business</a
-          >
-          <p class="mt-2 text-gray-500">
-            Getting a new business off the ground is a lot of hard work. Here
-            are five ideas you can use to find your first customers.
-          </p>
-        </div>
-      </div>
-    </div> -->
-  <!-- Example: Text and Text 50% 50% -->
-  <!-- <div class="mx-auto bg-white shadow-md overflow-hidden">
-      <div class="md:flex">
-        <div class="p-8">
-          <div
-            class="
-              uppercase
-              tracking-wide
-              text-sm text-indigo-500
-              font-semibold
-            "
-          >
-            Case study
-          </div>
-          <a
-            href="#"
-            class="
-              block
-              mt-1
-              text-lg
-              leading-tight
-              font-medium
-              text-black
-              hover:underline
-            "
-            >Finding customers for your new business</a
-          >
-          <p class="mt-2 text-gray-500">
-            Getting a new business off the ground is a lot of hard work. Here
-            are five ideas you can use to find your first customers.
-          </p>
-        </div>
-        <div class="p-8">
-          <div
-            class="
-              uppercase
-              tracking-wide
-              text-sm text-indigo-500
-              font-semibold
-            "
-          >
-            Case study
-          </div>
-          <a
-            href="#"
-            class="
-              block
-              mt-1
-              text-lg
-              leading-tight
-              font-medium
-              text-black
-              hover:underline
-            "
-            >Finding customers for your new business</a
-          >
-          <p class="mt-2 text-gray-500">
-            Getting a new business off the ground is a lot of hard work. Here
-            are five ideas you can use to find your first customers.
-          </p>
-        </div>
-      </div>
-    </div> -->
-  <!-- Example: Text and Text mit Begrenzung der linken Spalte ab md -->
-  <!-- <div class="mx-auto bg-white shadow-md overflow-hidden">
-      <div class="md:flex">
-        <div class="p-8 md:w-48">
-          <div
-            class="
-              uppercase
-              tracking-wide
-              text-sm text-indigo-500
-              font-semibold
-            "
-          >
-            Case study
-          </div>
-          <a
-            href="#"
-            class="
-              block
-              mt-1
-              text-lg
-              leading-tight
-              font-medium
-              text-black
-              hover:underline
-            "
-            >Finding customers for your new business</a
-          >
-          <p class="mt-2 text-gray-500">
-            Getting a new business off the ground is a lot of hard work. Here
-            are five ideas you can use to find your first customers.
-          </p>
-        </div>
-        <div class="p-8">
-          <div
-            class="
-              uppercase
-              tracking-wide
-              text-sm text-indigo-500
-              font-semibold
-            "
-          >
-            Case study
-          </div>
-          <a
-            href="#"
-            class="
-              block
-              mt-1
-              text-lg
-              leading-tight
-              font-medium
-              text-black
-              hover:underline
-            "
-            >Finding customers for your new business</a
-          >
-          <p class="mt-2 text-gray-500">
-            Getting a new business off the ground is a lot of hard work. Here
-            are five ideas you can use to find your first customers.
-          </p>
-        </div>
-      </div>
-    </div> -->
-  <!-- Example: Text and Text mit Begrenzung der linken Spalte ab md -->
-  <!-- Form for Comment can be used later for Notes-->
-  <!-- Area below is still static mockup -->
-  <!-- <section class="container mx-auto mt-6" id="comments">
-      <div
-        class="bg-white rounded border border-gray-200 relative flex flex-col"
-      >
-        <div class="px-6 pt-6 pb-5 font-bold border-b border-gray-200">
-          <span class="card-title"
-            >Comments (15) / Area below is static mockup</span
-          >
-          <i class="fa fa-comments float-right text-green-400 text-2xl"></i>
-        </div>
-        <div class="p-6">
-          <form>
-            <textarea
-              class="
-                block
-                w-full
-                py-1.5
-                px-3
-                text-gray-800
-                border border-gray-300
-                transition
-                duration-500
-                focus:outline-none
-                focus:border-black
-                rounded
-                mb-4
-              "
-              placeholder="Your comment here..."
-            ></textarea>
-            <button
-              type="submit"
-              class="py-1.5 px-3 rounded text-white bg-green-600 block"
-            >
-              Submit
-            </button>
-          </form>
-          <select
-            class="
-              block
-              mt-4
-              py-1.5
-              px-3
-              text-gray-800
-              border border-gray-300
-              transition
-              duration-500
-              focus:outline-none
-              focus:border-black
-              rounded
-            "
-          >
-            <option value="1">Latest</option>
-            <option value="2">Oldest</option>
-          </select>
-        </div>
-      </div>
-    </section> -->
-  <!-- Comments
-    Fully skipped Comments handling with:
-    Sorting on client side with sort()
-    Save current Sort Order in Query Params
-    -->
-  <!-- <ul class="container mx-auto">
-      <li class="p-6 bg-gray-50 border border-gray-200">
-        <div class="mb-5">
-          <div class="font-bold">Elaine Dreyfuss</div>
-          <time>5 mins ago</time>
-        </div>
-
-        <p>
-          Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-          accusantium der doloremque laudantium.
-        </p>
-      </li>
-    </ul> -->
+  <!-- BlockUI while getting track data -->
+  <div v-if="trackIsLoading" class="sp-block-ui"></div>
 </template>
 
 <script>
 import TrackHandler from "@/handlerobj/track";
 import TagHandler from "@/handlerobj/tag";
-import { mapActions, mapState, mapGetters } from "vuex";
-import AppTrackTags from "@/components/track/TrackTagListEdit.vue";
-import AppTagEditForm from "@/components/track/TagSingleEdit.vue";
+import { mapActions, mapGetters } from "vuex";
+import AppTrackTagsList from "@/components/track/TrackTagsList.vue";
+// eslint-disable-next-line import/no-unresolved
+import AppTagEdit from "@/components/track/TagEdit.vue";
 
 export default {
   name: "Track",
@@ -346,33 +92,26 @@ export default {
       showTagEditForm: false
     };
   },
-  components: { AppTrackTags, AppTagEditForm },
+  components: { AppTrackTagsList, AppTagEdit },
   computed: {
-    ...mapGetters(["trackIsPlaying"]),
-    // ...mapGetters(["getCurrentPlayingtrackKey"]),
+    ...mapGetters(["trackIsPlaying", "trackIsLoading"])
     // it's better to map entire object at once!
-    ...mapState(["currentTrack"]),
+    // ...mapState(["currentTrack"]),
     // Specific case: show play symbol to start next track
     // even if some other track is already running
-    myTrackIsPlaying() {
-      return (
-        this.trackIsPlaying &&
-        this.currentTrack.meta.trackKey === this.track.trackKey
-      );
-    }
+    // myTrackIsPlaying() {
+    //   return (
+    //     this.trackIsPlaying &&
+    //     this.currentTrack.meta.trackKey === this.track.trackKey
+    //   );
+    // }
   },
   methods: {
-    // Play button on Track can be used for both
-    // toggle playing (if user stays on the same track)
-    // or start new track on change
-    ...mapActions(["tryPlayNextTrack", "setStartPosition"]),
+    ...mapActions(["changeTrack", "togglePlaying", "stopCurrentTrack"]),
     addTag(newTag) {
-      // Update UI
-      this.track.tags.push(newTag);
-      // Set as current tag
-      this.currentTag = newTag;
-      // Update in db
-      this.track.update();
+      this.track.tags.push(newTag); // Update UI
+      this.currentTag = newTag; // Set as current tag
+      this.track.update(); // Update in db
       // ToDo: create and save Bookmark
       // Author: TrackTitle (BookTitle, SubTitle, Chapter)
       // All new tags will be automatically bookmarked
@@ -391,18 +130,28 @@ export default {
       // TagBookmarkKey (also id in DB) will be trackKey+Tagkey => simple to find
       // ToDo: user can also remove tag bookmark without removing tag
 
-      // Update in db
-      await this.track.update();
-      // Redirect to track page without tag ui after successful update
+      await this.track.update(); // Update in db
+      // Redirect to track page without tag UI after successful update
       this.$router.push({
         name: "track",
         params: { book_id: this.track.bookKey, track_id: this.track.trackKey }
       });
     },
-    handleTagModeChange() {
+    async handleTagModeChange() {
       console.log("// ToDo: add and remove Bookmark objects");
       // console.log(this.currentTag);
       this.currentTag.isBookmarked = !this.currentTag.isBookmarked;
+
+      // Reset start track position
+      console.log("Reset start track position");
+      if (this.currentTag.isBookmarked) {
+        this.changeTrack({
+          track: this.track,
+          currentTag: this.currentTag
+        });
+      } else {
+        this.stopCurrentTrack();
+      }
 
       // Update in db
       this.track.update();
@@ -434,7 +183,10 @@ export default {
         : {};
 
       // Nothing found => do nothing
-      if (!foundTag) return;
+      if (!foundTag) {
+        this.changeTrack({ track: this.track });
+        return;
+      }
 
       // Set current tag
       this.currentTag = foundTag;
@@ -444,9 +196,10 @@ export default {
 
       // open this tag and set start position
       // we cannot start playing on link-load because of browser restriction
-      this.setStartPosition({
-        seek: this.currentTag.position,
-        duration: this.track.length
+      // User interaction is needed
+      this.changeTrack({
+        track: this.track,
+        currentTag: this.currentTag
       });
     } catch (error) {
       console.log(
