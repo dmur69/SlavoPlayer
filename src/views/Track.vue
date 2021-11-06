@@ -42,9 +42,9 @@
           ></i>
         </button>
       </div>
+      <!-- Song Info -->
       <div class="m-4 md:my-8 md:flex">
         <div class="z-50 text-left ml-4 text-lg">
-          <!-- Song Info -->
           <div class="md:text-xl md:font-bold">
             {{ this.track.bookTitle }} | {{ this.track.subtitle }}
           </div>
@@ -57,6 +57,7 @@
         </div>
       </div>
     </div>
+    <app-track-player />
   </div>
   <!-- Tag management area -->
   <app-track-tags-list
@@ -82,6 +83,7 @@ import { mapActions, mapGetters } from "vuex";
 import AppTrackTagsList from "@/components/track/TrackTagsList.vue";
 // eslint-disable-next-line import/no-unresolved
 import AppTagEdit from "@/components/track/TagEdit.vue";
+import AppTrackPlayer from "@/components/track/TrackPlayer.vue";
 
 export default {
   name: "Track",
@@ -92,7 +94,7 @@ export default {
       showTagEditForm: false
     };
   },
-  components: { AppTrackTagsList, AppTagEdit },
+  components: { AppTrackTagsList, AppTagEdit, AppTrackPlayer },
   computed: {
     ...mapGetters(["trackIsPlaying", "trackIsLoading"]),
     fullTitle() {

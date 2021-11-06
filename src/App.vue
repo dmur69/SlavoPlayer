@@ -7,7 +7,7 @@
     <router-view :key="$route.fullPath"></router-view>
 
     <!-- Sticky Player at the bottom -->
-    <app-player v-if="this.$store.state.currentTrack.meta.trackKey" />
+    <!-- <app-player v-if="this.$store.state.currentTrack.meta.trackKey" /> -->
 
     <!-- Modal Login and Registration Form -->
     <auth-modal />
@@ -17,14 +17,14 @@
 <script>
 import AppHeader from "./components/app/Header.vue";
 import AuthModal from "./components/app/Auth.vue";
-import AppPlayer from "./components/app/Player.vue";
+// import AppPlayer from "./components/app/Player.vue";
 
 export default {
   name: "App",
   components: {
     AppHeader,
-    AuthModal,
-    AppPlayer
+    AuthModal
+    // AppPlayer
   },
   // Vue Life-Cycle function
   created() {
