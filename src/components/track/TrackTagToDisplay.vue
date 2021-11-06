@@ -1,14 +1,15 @@
 <template>
-  <span
+  <div
     class="
-      w-full
-      py-0.0
+      inline-block
       px-3
+      mx-1
+      mb-2
       text-gray-800
+      bg-gray-200
       transition
       duration-500
-      focus:outline-none
-      focus:border-black
+      focus:outline-none focus:border-black
       rounded
       border
       cursor-pointer
@@ -18,8 +19,8 @@
     @click.prevent="clickOnTagHandler"
   >
     <i v-if="tag.isBookmarked" class="fas fa-star pr-1 text-yellow-300" />
-    {{ this.tag.displayName }}</span
-  >
+    {{ this.tag.displayName }}
+  </div>
 </template>
 
 <script>
