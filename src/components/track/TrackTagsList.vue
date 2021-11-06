@@ -2,7 +2,7 @@
   <section class="container mx-auto mt-6" id="tags">
     <div class="md:grid md:grid-cols-4 md:gap-4">
       <!-- Drop-down with all available tags. Hidden on load. -->
-      <div id="tagsDropdown" class="dropdown-content">
+      <div id="tagsDropdown" v-if="showTagDropdown" class="dropdown-content">
         <input
           type="text"
           placeholder="Search.."
@@ -18,25 +18,18 @@
         />
       </div>
       <!-- List of already added tags with button to add new tag -->
-      <div class="col-span-4">
+      <div class="col-span-4 inline-block">
         <!-- Button to add new tag (toggle hidden drop-down) -->
-        <span
-          class="
-            w-full
-            py-0.0
-            px-3
-            text-gray-800
-            border border-gray-300
-            transition
-            duration-500
-            focus:outline-none focus:border-black
-            rounded
-            cursor-pointer
+        <i
+          :title="
+            showTagDropdown
+              ? 'Схлопнуть лист тегов'
+              : 'Добавить закладку или тег'
           "
-          title="Добавить закладку или тег"
+          class="fa text-3xl px-5"
+          :class="showTagDropdown ? 'fa-minus-circle' : 'fa-plus-circle'"
           @click="handleTagDropDownClick"
-          >+</span
-        >
+        ></i>
         <!-- List of tag buttons / current can be selected on click -->
         <app-track-tag-to-display
           v-for="tag in parentTrack.tags"
@@ -72,7 +65,8 @@ export default {
       savedTrackPosition: 0,
       tagSearchIsActive: false,
       allTags: [],
-      currentTagKey: ""
+      currentTagKey: "",
+      showTagDropdown: false
     };
   },
   props: {
@@ -113,7 +107,8 @@ export default {
     },
     // Toggles dropdown for adding new tags and performs other actions
     async handleTagDropDownClick() {
-      document.getElementById("tagsDropdown").classList.toggle("show");
+      this.showTagDropdown = !this.showTagDropdown;
+      // document.getElementById("tagsDropdown").classList.toggle("show");
 
       this.savedTrackPosition = this.currentTrackPosition;
 
