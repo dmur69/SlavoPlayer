@@ -1,3 +1,6 @@
+// Currently not in use
+// Sticky mini player assigned to buttom from the first version
+// can later be used on certain pages - do not delete
 <template>
   <section class="fixed bottom-0 left-0 bg-white pb-4 align-top w-full h-30">
     <div class="relative">
