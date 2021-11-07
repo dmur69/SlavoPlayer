@@ -1,6 +1,6 @@
 <template>
   <!-- Track info area -->
-  <div
+  <section
     class="
       mx-auto
       bg-white
@@ -9,16 +9,16 @@
       bg-cover
       md:bg-contain
       music-bg
-      text-white
+      text-gray-300
       container
       items-center
     "
     style="background-image: url(/assets/img/song-header.png)"
   >
-    <div class="md:flex">
-      <div class="p-4 md:py-8 md:w-48 text-center relative">
+    <div class="lg:flex">
+      <div class="p-4 md:py-8 text-center lg:w-1/2">
         <!-- Play/Pause Button -->
-        <button
+        <!-- <button
           id="play-main"
           type="button"
           class="
@@ -26,7 +26,7 @@
             h-24
             w-24
             text-3xl
-            bg-white
+            bg-gray-300
             text-black
             rounded-full
             focus:outline-none
@@ -40,10 +40,11 @@
               'fa-pause': trackIsPlaying
             }"
           ></i>
-        </button>
+        </button> -->
+        <app-track-player />
       </div>
       <!-- Song Info -->
-      <div class="m-4 md:my-8 md:flex">
+      <div class="m-4 md:my-8 lg:w-1/2">
         <div class="z-50 text-left ml-4 text-lg">
           <div class="md:text-xl md:font-bold">
             {{ this.track.bookTitle }} | {{ this.track.subtitle }}
@@ -57,8 +58,7 @@
         </div>
       </div>
     </div>
-    <app-track-player />
-  </div>
+  </section>
   <!-- Tag management area -->
   <app-track-tags-list
     :parentTrack="track"
