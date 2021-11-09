@@ -4,10 +4,10 @@
     <div class="flex text-gray-300 text-3xl m-5 space-x-5">
       <!-- Play/Pause -->
       <button
-        id="play-next"
+        id="play-prev"
         v-if="currentPlaylist.seek"
         type="button"
-        @click.prevent="playPrevTrack"
+        @click.prevent="playPrev"
       >
         <i class="fa fa-fast-backward" />
       </button>
@@ -26,7 +26,7 @@
         id="play-next"
         v-if="currentPlaylist.seek"
         type="button"
-        @click.prevent="playNextTrack"
+        @click.prevent="playNext"
       >
         <i class="fa fa-fast-forward" />
       </button>
@@ -80,6 +80,7 @@ import { mapGetters, mapActions, mapState } from "vuex";
 
 export default {
   name: "TrackPlayer",
+  emits: ["change-track"],
   computed: {
     ...mapGetters(["trackIsPlaying"]),
     ...mapState(["currentTrack", "currentPlaylist"])
@@ -90,7 +91,17 @@ export default {
       "updateSeek",
       "playNextTrack",
       "playPrevTrack"
-    ])
+    ]),
+    async playNext() {
+      await this.playNextTrack();
+      console.log(`PlayNext Nr: ${this.currentTrack.meta.nr}`);
+      this.$emit("change-track", this.currentTrack.meta);
+    },
+    async playPrev() {
+      await this.playPrevTrack();
+      console.log(`PlayPrev Nr: ${this.currentTrack.meta.nr}`);
+      this.$emit("change-track", this.currentTrack.meta);
+    }
   }
 };
 </script>

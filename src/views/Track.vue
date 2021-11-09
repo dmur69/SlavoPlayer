@@ -16,32 +16,9 @@
     style="background-image: url(/assets/img/song-header.png)"
   >
     <div class="lg:flex">
+      <!-- Player -->
       <div class="p-4 md:py-8 text-center lg:w-1/2">
-        <!-- Play/Pause Button -->
-        <!-- <button
-          id="play-main"
-          type="button"
-          class="
-            z-50
-            h-24
-            w-24
-            text-3xl
-            bg-gray-300
-            text-black
-            rounded-full
-            focus:outline-none
-          "
-          @click.prevent="togglePlaying"
-        >
-          <i
-            class="fas"
-            :class="{
-              'fa-play': !trackIsPlaying,
-              'fa-pause': trackIsPlaying
-            }"
-          ></i>
-        </button> -->
-        <app-track-player />
+        <app-track-player @change-track="handleChangeTrack" />
       </div>
       <!-- Song Info -->
       <div class="m-4 md:my-8 lg:w-1/2">
@@ -132,9 +109,18 @@ export default {
         params: { book_id: this.track.bookKey, track_id: this.track.trackKey }
       });
     },
+    handleChangeTrack(newTrack) {
+      this.track = newTrack;
+      console.log(`newTrack in Track.vue handleChangeTrack:${newTrack}`);
+      document.title = this.fullTitle;
+      // Redirect to track page without tag UI after successful update
+      this.$router.push({
+        name: "track",
+        params: { book_id: this.track.bookKey, track_id: this.track.trackKey }
+      });
+    },
     async handleTagModeChange() {
       console.log("// ToDo: add and remove Bookmark objects");
-      // console.log(this.currentTag);
       this.currentTag.isBookmarked = !this.currentTag.isBookmarked;
 
       // Reset start track position
