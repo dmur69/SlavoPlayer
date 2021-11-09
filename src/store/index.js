@@ -27,10 +27,8 @@ export default createStore({
   mutations: {
     // For Track
     changeCurrentTrack: (state, payload) => {
-      console.log(payload);
-      console.log(state);
       state.currentTrack.meta = payload.track;
-      console.log("Current track changed...?");
+      console.log("Current track changed/mutated");
       state.currentTrack.sound = new Howl({
         src: [payload.track.url], // can contain an array of full urls to play
         html5: true
@@ -131,6 +129,9 @@ export default createStore({
     // >>>>>> The function where with Howl-object sound.play()
     // and events definition sound.on()
     playCurrentTrack({ state, dispatch, commit }) {
+      if (!state.currentTrack.sound.play) {
+        return;
+      }
       commit("updateLoadingState", true);
       state.currentTrack.sound.play(); // Start playing Howler.js object
       // from each url defined on object creation
@@ -149,34 +150,21 @@ export default createStore({
         dispatch("playNextTrack"); // Start playing next song
       });
     },
-    changeTrack({ commit, dispatch, getters }, payload) {
+    changeTrack({ commit, dispatch }, payload) {
       console.log("Action to change current track...");
-      // Check if current song is already playing
-      if (getters.trackIsPlaying) {
-        dispatch("stopCurrentTrack"); // stop first
-      }
-      // ...then change track
+      dispatch("stopCurrentTrack"); // stop first
+      // ...then commit change track
       commit("changeCurrentTrack", payload);
     },
-    playNextTrack({ commit, dispatch, getters }) {
-      // Check if current song is already playing
-      if (getters.trackIsPlaying) {
-        dispatch("stopCurrentTrack"); // stop first
-      }
-      // ...then change track and play
+    async playNextTrack({ dispatch, getters }) {
       const payload = { track: getters.getNextTrack };
-      commit("changeCurrentTrack", payload);
+      dispatch("changeTrack", payload);
       dispatch("playCurrentTrack");
       console.log("Start next track...");
     },
-    playPrevTrack({ commit, dispatch, getters }) {
-      // Check if current song is already playing
-      if (getters.trackIsPlaying) {
-        dispatch("stopCurrentTrack"); // stop first
-      }
-      // ...then change track and play
+    playPrevTrack({ dispatch, getters }) {
       const payload = { track: getters.getPrevTrack };
-      commit("changeCurrentTrack", payload);
+      dispatch("changeTrack", payload);
       dispatch("playCurrentTrack");
       console.log("Start prev track...");
     },
@@ -189,12 +177,18 @@ export default createStore({
       }
     },
     pauseCurrentTrack({ state }) {
+      if (!state.currentTrack.sound.pause) {
+        return;
+      }
       state.currentTrack.sound.pause(); // Start playing Howler.js object
       // from each url defined on object creation
       console.log("Pause track...");
     },
     stopCurrentTrack({ state }) {
-      state.currentTrack.sound.stop(); // Start playing Howler.js object
+      if (!state.currentTrack.sound.stop) {
+        return;
+      }
+      state.currentTrack.sound.stop(); // Stop playing Howler.js object
       state.currentTrack.seek = "00:00";
       state.currentTrack.duration = "00:00";
       state.currentTrack.seekPercentage = "0%";

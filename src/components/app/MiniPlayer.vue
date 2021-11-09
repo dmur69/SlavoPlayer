@@ -95,7 +95,7 @@
 import { mapGetters, mapActions, mapState } from "vuex";
 
 export default {
-  name: "Player",
+  name: "MiniPlayer",
   computed: {
     ...mapGetters(["trackIsPlaying"]),
     ...mapState(["currentTrack", "currentPlaylist"])
