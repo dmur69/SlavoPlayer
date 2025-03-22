@@ -1,7 +1,7 @@
-import firebase from "firebase/app";
-import "firebase/auth";
-import "firebase/firestore"; // not database - this is the old version
-import "firebase/storage"; // for music upload
+import firebase from "firebase/compat/app";
+import "firebase/compat/auth";
+import "firebase/compat/firestore"; // not database - this is the old version
+import "firebase/compat/storage"; // for music upload
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
