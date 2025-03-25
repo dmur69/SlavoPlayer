@@ -58,7 +58,6 @@ import TrackHandler from "@/handlerobj/track";
 import TagHandler from "@/handlerobj/tag";
 import { mapActions, mapGetters } from "vuex";
 import AppTrackTagsList from "@/components/track/TrackTagsList.vue";
-// eslint-disable-next-line import/no-unresolved
 import AppTagEdit from "@/components/track/TagEdit.vue";
 import AppTrackPlayer from "@/components/track/TrackPlayer.vue";
 
