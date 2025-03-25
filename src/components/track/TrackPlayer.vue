@@ -1,8 +1,8 @@
 <template>
+  <!-- Buttons (and seek for mobile) -->
   <div class="flex justify-center">
-    <!-- Buttons -->
-    <div class="flex text-gray-300 text-3xl m-5 space-x-5">
-      <!-- Play/Pause -->
+    <div class="flex text-gray-300 text-3xl m-5 space-x-6">
+      <!-- Play/Pause Button -->
       <button
         id="play-prev"
         v-if="currentPlaylist.seek"
@@ -11,10 +11,10 @@
       >
         <i class="fa fa-fast-backward" />
       </button>
-      <!-- Back Button -->
+      <!-- Play/Pause Button -->
       <button id="play-player" type="button" @click.prevent="togglePlaying">
         <i
-          class="fa px-5"
+          class="fa"
           :class="{
             'fa-play': !trackIsPlaying,
             'fa-pause': trackIsPlaying
@@ -30,10 +30,10 @@
       >
         <i class="fa fa-fast-forward" />
       </button>
-    </div>
-    <!-- Seek ticker for mobile-->
-    <div class="md:hidden text-gray-300 font-bold text-xl pt-6">
-      <span class="player-currenttime">{{ currentTrack.seek }}</span>
+      <!-- Seek ticker for mobile-->
+      <div class="md:hidden text-gray-300 font-medium">
+        <span class="player-currenttime">{{ currentTrack.seek }}</span>
+      </div>
     </div>
   </div>
   <!-- Progress and duration -->

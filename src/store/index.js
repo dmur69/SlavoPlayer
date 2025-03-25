@@ -1,5 +1,3 @@
-/* eslint-disable indent */
-// eslint-disable-next-line object-curly-newline
 import { createStore } from "vuex";
 import { Howl } from "howler";
 import helper from "@/includes/helper";

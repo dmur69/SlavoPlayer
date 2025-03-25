@@ -1,34 +1,35 @@
-# SlavoPlayer
+# xPlayer
 
-## Project setup
-```
-yarn install
-```
+This template should help get you started developing with Vue 3 in Vite.
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
+## Recommended IDE Setup
 
-### Compiles and minifies for production
-```
-yarn build
-```
+[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
 
-### Run your unit tests
-```
-yarn test:unit
+## Customize configuration
+
+See [Vite Configuration Reference](https://vite.dev/config/).
+
+## Project Setup
+
+```sh
+npm install
 ```
 
-### Run your end-to-end tests
-```
-yarn test:e2e
+### Compile and Hot-Reload for Development
+
+```sh
+npm run dev
 ```
 
-### Lints and fixes files
-```
-yarn lint
+### Compile and Minify for Production
+
+```sh
+npm run build
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### Run Unit Tests with [Vitest](https://vitest.dev/)
+
+```sh
+npm run test:unit
+```
