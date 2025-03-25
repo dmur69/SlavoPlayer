@@ -19,7 +19,6 @@
           // to keep only as an example for later use of props = true feature of router:
           params: {
             book_id: book.bookKey, // passed always because also url param
-            bookkey: book.bookKey // passed only on programatic call from Home.vue
           }
         }"
         class="font-bold block text-gray-600 tst-track-name"

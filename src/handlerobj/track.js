@@ -110,9 +110,8 @@ class TrackHandler {
   async getOnKey(source, key) {
     console.log("getOnKey() from Track");
     const trackMapper = new TrackMapper(source);
-    console.log("Track1");
+    console.log(key);
     const trackMeta = await trackMapper.getOnKey(key);
-    console.log("Track2");
     return new TrackHandler(trackMeta);
   }
 }

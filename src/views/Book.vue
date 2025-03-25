@@ -50,7 +50,6 @@ export default {
     AppTrackToPlay
   },
   props: [
-    "bookkey", // passt from route WITHOUT url param only on programatic call possible!
     "book_id" // passt always from url
   ],
   data() {
@@ -142,9 +141,7 @@ export default {
       count = await this.getTracks(currentBook);
     }
     console.log("Understand pros = true router feature");
-    // undefined on Url call // this.bookkey = this.book_id on calling programmatically
     console.log(currentBook);
-    console.log(this.bookkey);
     console.log(this.book_id); // this.book_id = this.$route.params.book_id always!
     // If it fails, we load our default collection
     if (count < 1) {

@@ -1,12 +1,11 @@
-import { createApp } from "vue"; // импорт всего содержимого
-import App from "./App.vue"; // иморт единичного значения / например с помощь export
-import router from "./router";
-import store from "./store";
+import { createApp } from "vue"; // load vue lib
+import App from "./App.vue"; // app root component
+import router from "./router"; 
+import store from "./store"; // app is still using vuex (not pinia)
 import VeeValidatePlugin from "./includes/validation";
-import { auth } from "./datamappers/firebase/firebase";
-import "./assets/tailwind.css";
+import { auth } from "./datamappers/firebase/firebase"; // in compat (!) "firebase/compat/auth";
+import "./assets/base.css";
 import "./assets/main.css";
-import i18n from "./includes/i18n";
 
 let app;
 
@@ -18,7 +17,6 @@ auth.onAuthStateChanged(() => {
     app.use(store);
     app.use(router);
     app.use(VeeValidatePlugin);
-    app.use(i18n);
 
     app.mount("#app");
   }

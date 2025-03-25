@@ -5,6 +5,7 @@ import {
   ErrorMessage,
   configure,
 } from 'vee-validate';
+
 import {
   required,
   min,
