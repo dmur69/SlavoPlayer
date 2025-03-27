@@ -18,6 +18,12 @@ auth.onAuthStateChanged(() => {
     app.use(router);
     app.use(VeeValidatePlugin);
 
+    // Plain way to disable logs
+    const consoleLog = true
+    if(!consoleLog) {
+      console.log = function() {} 
+    }
+
     app.mount("#app");
   }
 });
