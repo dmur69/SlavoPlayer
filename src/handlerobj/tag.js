@@ -15,7 +15,6 @@ class TagHandler {
   // DisplayName should be unique for any tag
   // eslint-disable-next-line class-methods-use-this
   generateKeyFromTitle(tag) {
-    console.log("displayNameToKey");
     const key = String(tag);
     // .toUpperCase()
     // .replace(/\s/g, "");
@@ -42,6 +41,7 @@ class TagHandler {
   // to get all: do not set any params
   // to start from beginning: set only first param
   async get(params) {
+    console.log("Get tag handler");
     const tags = await this.tagMapper.get(params);
     return tags;
   }

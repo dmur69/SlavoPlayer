@@ -4,7 +4,6 @@ import TrackMapper from "@/datamappers/firebase/firestore/tracks";
 
 class TrackHandler {
   constructor(tr) {
-    // console.log("Entering constructor");
     if (tr) {
       // See getMeta for details:
       this.trackKey = tr.trackKey;
@@ -97,7 +96,6 @@ class TrackHandler {
   async get(params) {
     console.log("get() from Track");
     const trackMapper = new TrackMapper(params.source);
-    console.log(params);
     const tracksMeta = await trackMapper.get(params);
     const tracksArray = [];
     tracksMeta.forEach(trackMeta => {
@@ -110,7 +108,6 @@ class TrackHandler {
   async getOnKey(source, key) {
     console.log("getOnKey() from Track");
     const trackMapper = new TrackMapper(source);
-    console.log(key);
     const trackMeta = await trackMapper.getOnKey(key);
     return new TrackHandler(trackMeta);
   }

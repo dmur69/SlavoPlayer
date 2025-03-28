@@ -88,7 +88,6 @@ export default {
           }); // called with only 2 params gets first portion of tracks for infinite scroll
           // ... starts from the beginning
         }
-        console.log(tracksMetaArray);
         tracksMetaArray.forEach((trackMeta) => {
           const trackArrayItem = new TrackHandler({
             ...trackMeta
@@ -140,9 +139,8 @@ export default {
       // console.log("Try to load from collection1");
       count = await this.getTracks(currentBook);
     }
-    console.log("Understand pros = true router feature");
+    console.log("Current book");
     console.log(currentBook);
-    console.log(this.book_id); // this.book_id = this.$route.params.book_id always!
     // If it fails, we load our default collection
     if (count < 1) {
       this.getTracks(currentBook);
@@ -150,7 +148,6 @@ export default {
       // Chage only after validation
       this.currentBook = currentBook;
     }
-    console.log(this.currentBook);
     window.addEventListener("scroll", this.handleTrackListScroll);
   },
   beforeUnmount() {

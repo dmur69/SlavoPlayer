@@ -3,7 +3,6 @@ import AbstractkMapper from "./abstract";
 class TrackMapper {
   constructor(collection, track) {
     console.log("TrackManager constructor");
-    console.log(track);
     // ToDo:
     // if(!collection) this.collectionName = bookKey else
     this.collectionName = collection;
@@ -29,7 +28,6 @@ class TrackMapper {
   // return back entity objects, caller can deal with
   async get(params) {
     console.log("get() from TrackMapper");
-    console.log(params);
     const tracks = await this.abstactMapper.getDocs(params);
     return tracks;
   }

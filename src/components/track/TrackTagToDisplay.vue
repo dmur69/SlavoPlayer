@@ -38,14 +38,12 @@ export default {
   },
   methods: {
     clickOnTagHandler() {
-      // console.log(this.tag);
       // Let parent do handling
       this.$emit("tag-click", this.tag);
     }
   },
   async created() {
     console.log("Tag to display created");
-    console.log(this.isCurrentTag);
   }
 };
 </script>

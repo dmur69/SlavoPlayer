@@ -26,19 +26,17 @@ class AbstractkMapper {
         .collection(this.collectionName)
         .doc(this.key)
         .set(this.objectToSave);
-      console.log("Created new document in firestore.");
+      console.log("Abstract mapper: created new document in firestore.");
     } catch (error) {
-      console.log(this);
       console.log(
-        `Unexpected error on saving track meta... Error message: ${error.message}`
+        `Abstract mapper: unexpected error on saving track meta... Error message: ${error.message}`
       );
     }
   }
 
   // Updates entire existing document
   async updateDoc() {
-    console.log("updateDoc in abstract");
-    console.log(this.objectToSave);
+    console.log("Abstract mapper: updateDoc");
     try {
       // Can partly update document
       // Definition due to this.objectToSave
@@ -57,7 +55,7 @@ class AbstractkMapper {
   // Get methods
   // return back abstract entity objects, caller can deal with
   async getDocs(params) {
-    console.log("getDocs() in abstract1");
+    console.log("Abstract mapper: getDocs()");
     const p = params;
     // If source not set, try alternatively read from pre-defined collection
     // Only for tracks source should to be passed via getDocs
@@ -69,7 +67,6 @@ class AbstractkMapper {
     } else {
       await this.findAll(p);
     }
-    console.log(this.docsArray);
     return this.docsArray;
   }
 
@@ -84,9 +81,7 @@ class AbstractkMapper {
       this.request.pending = true;
 
       const fsdb = db.collection(this.collectionName);
-      console.log(this.collectionName);
       doc = await fsdb.doc(key).get();
-      console.log(doc.data());
 
       this.request.pending = false;
     } catch (error) {
@@ -99,14 +94,13 @@ class AbstractkMapper {
   // Find helper methods
   async findAll(params) {
     try {
-      console.log("findAll in abstract1");
+      console.log("Abstract mapper: findAll");
       // Avoid sending muliple calls at a time
       if (this.request.pending) {
         console.log("Request is already pending");
         return;
       }
       this.request.pending = true;
-      console.log(params.source);
       const docSnapshots = await db
         .collection(params.source)
         .orderBy(params.sortOnColumn)
@@ -119,26 +113,23 @@ class AbstractkMapper {
       });
       this.request.pending = false;
     } catch (error) {
-      console.log(`Error while quering tags from database: ${error.message}`);
+      console.log(`Abstract mapper: error while quering tags from database: ${error.message}`);
     }
-    console.log("findAll in abstract2");
   }
 
   async findNext(params) {
     try {
       // Avoid sending muliple calls at a time
       if (this.request.pending) {
-        console.log("Request is already pending");
+        console.log("Abstract mapper: Request is already pending");
         return;
       }
       this.request.pending = true;
 
       let docSnapshots;
-      console.log(params.source);
-      console.log(params);
       if (params.startAfterKey) {
         console.log(
-          `Quering firebase with findNext. Start after:${params.startAfterKey}`
+          `Abstract mapper: quering firebase with findNext. Start after:${params.startAfterKey}`
         );
         const startAfterDoc = await db
           .collection(params.source)
@@ -152,14 +143,13 @@ class AbstractkMapper {
           .limit(params.numberOfItems)
           .get();
       } else {
-        console.log("Quering firebase with findNext. Start from beginning.");
+        console.log("Abstract mapper: quering firebase with findNext. Start from beginning.");
         docSnapshots = await db
           .collection(params.source)
           .orderBy(params.sortOnColumn)
           .limit(params.numberOfItems)
           .get();
       }
-      console.log(docSnapshots);
       docSnapshots.forEach(docSnapshot => {
         const doc = {
           ...docSnapshot.data()
@@ -168,7 +158,7 @@ class AbstractkMapper {
       });
       this.request.pending = false;
     } catch (error) {
-      console.log(`Error while quering tags from database: ${error.message}`);
+      console.log(`Abstract mapper: error while quering tags from database: ${error.message}`);
     }
   }
 

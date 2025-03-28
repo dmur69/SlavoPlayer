@@ -170,7 +170,6 @@ export default {
     if (this.$route.params.tag_id) {
       this.currentTagKey = this.$route.params.tag_id;
     }
-    console.log(this.currentTag);
   }
 };
 </script>
