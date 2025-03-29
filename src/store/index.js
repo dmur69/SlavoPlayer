@@ -73,14 +73,12 @@ export default createStore({
     updateLoadingState(state, payload) {
       state.currentTrack.isLoading = payload;
       console.log("state.currentTrack.isLoading");
-      console.log(state.currentTrack.isLoading);
     },
     // For Playlist
     updateCurrentPlaylist: (state, payload) => {
       state.currentPlaylist.meta = payload.meta;
       console.log("Current playlist changed...");
       state.currentPlaylist.trackArray = payload.trackArray;
-      console.log(state.currentPlaylist);
     }
   },
   getters: {
@@ -113,7 +111,6 @@ export default createStore({
       if (prevIndex >= 0) {
         track = state.currentPlaylist.trackArray[prevIndex];
       }
-      console.log(prevIndex);
       return track;
     }
   },
