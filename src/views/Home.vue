@@ -48,7 +48,6 @@
 
 <script>
 import BookHandler from "@/handlerobj/book";
-// import { mapGetters } from "vuex";
 import AppBookToPlay from "../components/home/BookToPlay.vue";
 
 export default {
@@ -66,8 +65,8 @@ export default {
   async created() {
     let booksMetaArray = [];
     try {
-      const bookHandler = new BookHandler(); // Create just handler object
       console.log("Home1 - get books");
+      const bookHandler = new BookHandler(); // Create just handler object
       booksMetaArray = await bookHandler.get({
         source: "books",
         sortOnColumn: "title"
@@ -77,7 +76,6 @@ export default {
       booksMetaArray.forEach((bookMeta) => {
         this.booksArray.push(bookMeta);
         console.log("bookArrayItem added.");
-        // console.log(bookMeta);
       });
     } catch (error) {
       console.log(`Error while quering tracks from database: ${error.message}`);

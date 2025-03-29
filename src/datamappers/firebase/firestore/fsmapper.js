@@ -1,7 +1,9 @@
 import { db } from "@/datamappers/firebase/firebase";
 
-class AbstractkMapper {
+// Impelents the functionality working with firebase collections & documents
+class CollectionMapper {
   constructor(collectionName, object, key) {
+    console.log("Enetring constructor in CollectionMapper");
     this.collectionName = collectionName;
     this.objectToSave = object;
     this.key = key;
@@ -26,17 +28,17 @@ class AbstractkMapper {
         .collection(this.collectionName)
         .doc(this.key)
         .set(this.objectToSave);
-      console.log("Abstract mapper: created new document in firestore.");
+      console.log("FS mapper: created new document in firestore.");
     } catch (error) {
       console.log(
-        `Abstract mapper: unexpected error on saving track meta... Error message: ${error.message}`
+        `FS mapper: unexpected error on saving track meta... Error message: ${error.message}`
       );
     }
   }
 
   // Updates entire existing document
   async updateDoc() {
-    console.log("Abstract mapper: updateDoc");
+    console.log("FS mapper: updateDoc");
     try {
       // Can partly update document
       // Definition due to this.objectToSave
@@ -53,9 +55,8 @@ class AbstractkMapper {
   }
 
   // Get methods
-  // return back abstract entity objects, caller can deal with
-  async getDocs(params) {
-    console.log("Abstract mapper: getDocs()");
+  async get(params) {
+    console.log("FS mapper: getDocs()");
     const p = params;
     // If source not set, try alternatively read from pre-defined collection
     // Only for tracks source should to be passed via getDocs
@@ -70,7 +71,7 @@ class AbstractkMapper {
     return this.docsArray;
   }
 
-  async getDoc(key) {
+  async getOnKey(key) {
     let doc = {};
     try {
       // Avoid sending muliple calls at a time
@@ -87,14 +88,13 @@ class AbstractkMapper {
     } catch (error) {
       console.log(`Error while quering tags from database: ${error.message}`);
     }
-    // eslint-disable-next-line consistent-return
     return { ...doc.data() };
   }
 
   // Find helper methods
   async findAll(params) {
     try {
-      console.log("Abstract mapper: findAll");
+      console.log("FS mapper: findAll");
       // Avoid sending muliple calls at a time
       if (this.request.pending) {
         console.log("Request is already pending");
@@ -113,7 +113,7 @@ class AbstractkMapper {
       });
       this.request.pending = false;
     } catch (error) {
-      console.log(`Abstract mapper: error while quering tags from database: ${error.message}`);
+      console.log(`FS mapper: error while quering tags from database: ${error.message}`);
     }
   }
 
@@ -121,7 +121,7 @@ class AbstractkMapper {
     try {
       // Avoid sending muliple calls at a time
       if (this.request.pending) {
-        console.log("Abstract mapper: Request is already pending");
+        console.log("FS mapper: Request is already pending");
         return;
       }
       this.request.pending = true;
@@ -129,7 +129,7 @@ class AbstractkMapper {
       let docSnapshots;
       if (params.startAfterKey) {
         console.log(
-          `Abstract mapper: quering firebase with findNext. Start after:${params.startAfterKey}`
+          `FS mapper: quering firebase with findNext. Start after:${params.startAfterKey}`
         );
         const startAfterDoc = await db
           .collection(params.source)
@@ -143,7 +143,7 @@ class AbstractkMapper {
           .limit(params.numberOfItems)
           .get();
       } else {
-        console.log("Abstract mapper: quering firebase with findNext. Start from beginning.");
+        console.log("FS mapper: quering firebase with findNext. Start from beginning.");
         docSnapshots = await db
           .collection(params.source)
           .orderBy(params.sortOnColumn)
@@ -158,7 +158,7 @@ class AbstractkMapper {
       });
       this.request.pending = false;
     } catch (error) {
-      console.log(`Abstract mapper: error while quering tags from database: ${error.message}`);
+      console.log(`FS mapper: error while quering tags from database: ${error.message}`);
     }
   }
 
@@ -168,4 +168,4 @@ class AbstractkMapper {
   // Alg: use find doc on key in fsdb
 }
 
-export default AbstractkMapper;
+export default CollectionMapper;

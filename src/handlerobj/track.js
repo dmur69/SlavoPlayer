@@ -1,6 +1,6 @@
 // TrackHandler object
 // CRUD und helper methods for working with  track objects
-import TrackMapper from "@/datamappers/firebase/firestore/tracks";
+import CollectionMapper from "@/datamappers/firebase/firestore/fsmapper";
 
 class TrackHandler {
   constructor(tr) {
@@ -74,28 +74,23 @@ class TrackHandler {
   // Creates new Track
   save(destination) {
     const dest = !destination ? this.bookKey : destination;
-    const trackMapper = new TrackMapper(dest, this.getMeta());
+    const trackMapper = new CollectionMapper(dest, this.getMeta());
     trackMapper.save();
   }
 
   // Updates existing Track
   update(destination) {
     const dest = !destination ? this.bookKey : destination;
-    const trackMapper = new TrackMapper(dest, this.getMeta());
-    // if (propsToUpdate) {
-    //   trackMapper.update(propsToUpdate);
-    // } else {
+    const trackMapper = new CollectionMapper(dest, this.getMeta());
     trackMapper.update();
-    // }
   }
 
   // Get methods
   // to get all: set only source param
   // to start from beginning: set also numberOfTracks param
-  // eslint-disable-next-line class-methods-use-this
   async get(params) {
     console.log("get() from Track");
-    const trackMapper = new TrackMapper(params.source);
+    const trackMapper = new CollectionMapper(params.source);
     const tracksMeta = await trackMapper.get(params);
     const tracksArray = [];
     tracksMeta.forEach(trackMeta => {
@@ -104,10 +99,9 @@ class TrackHandler {
     return tracksArray;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   async getOnKey(source, key) {
     console.log("getOnKey() from Track");
-    const trackMapper = new TrackMapper(source);
+    const trackMapper = new CollectionMapper(source);
     const trackMeta = await trackMapper.getOnKey(key);
     return new TrackHandler(trackMeta);
   }
