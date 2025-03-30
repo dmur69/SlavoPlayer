@@ -13,9 +13,4 @@ export default defineConfig({
     tailwindcss(),
   ],
   base: "/SlavoPlayer/",
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
-    },
-  },
 })
