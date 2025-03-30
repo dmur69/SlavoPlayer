@@ -1,9 +1,9 @@
 import { createApp } from "vue"; // load vue lib
-import App from "./App.vue"; // app root component
+import App from "./App.vue"; // SlavoPlayer root component
 import router from "./router"; 
-import store from "./store"; // app is still using vuex (not pinia)
-import VeeValidatePlugin from "./includes/validation";
+import store from "./store/vuexstore"; // app is still using vuex (not pinia)
 import { auth } from "./datamappers/firebase/firebase"; // in compat (!) "firebase/compat/auth";
+import VeeValidatePlugin from "./includes/validation"; // Form validation Plugin
 import "./assets/base.css";
 import "./assets/main.css";
 

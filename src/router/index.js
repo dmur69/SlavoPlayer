@@ -4,7 +4,7 @@ import Manage from "@/views/Manage.vue";
 import Book from "@/views/Book.vue";
 import Track from "@/views/Track.vue";
 import About from "@/views/About.vue";
-import store from "@/store";
+import store from "@/store/vuexstore";
 
 // Define routes
 const routes = [
