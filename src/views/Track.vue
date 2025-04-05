@@ -13,7 +13,7 @@
       container
       items-center
     "
-    style="background-image: url('/SlavoPlayer/song-header.png')"
+    style="background-image: url('/song-header.png')"
   >
     <div class="lg:flex">
       <!-- Player -->
