@@ -8,12 +8,12 @@
       overflow-hidden
       bg-cover
       md:bg-contain
-      music-bg
+      introduction-bg
       text-gray-300
       container
       items-center
     "
-    style="background-image: url(/assets/img/song-header.png)"
+    style="background-image: url('/SlavoPlayer/src/assets/song-header.png')"
   >
     <div class="lg:flex">
       <!-- Player -->
