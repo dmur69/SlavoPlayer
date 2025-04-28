@@ -4,16 +4,28 @@ import CollectionMapper from "@/datamappers/firebase/firestore/fsmapper";
 
 class TagHandler {
   constructor(tag) {
-    this.displayName = tag;
-    this.tagKey = this.generateKeyFromTitle(tag);
-    this.sysTag = true; // has to be explicetely unset if needed on the track level
-    this.isBookmarked = true; // has to be explicetely unset if needed on the track level
-    this.position = 0; // has to be explicetely set if needed on the track level
-    this.tagMapper = new CollectionMapper(this.getMeta());
+    if (tag) {
+      this.displayName = tag;
+      this.tagKey = this.generateKeyFromTitle(tag);
+      this.sysTag = true; // has to be explicetely unset if needed on the track level
+      this.isBookmarked = true; // has to be explicetely unset if needed on the track level
+      this.position = 0; // has to be explicetely set if needed on the track level
+      this.tagMapper = new CollectionMapper(this.getMeta());
+    }
+    else 
+    {
+      this.displayName = "Bookmark";
+      this.tagKey = "bookmark";
+      this.sysTag = true; // has to be explicetely unset if needed on the track level
+      this.isBookmarked = true; // has to be explicetely unset if needed on the track level
+      this.position = 0; // has to be explicetely set if needed on the track level
+      this.tagMapper = new CollectionMapper();
+    }
   }
 
   // DisplayName should be unique for any tag
   generateKeyFromTitle(tag) {
+    console.log(tag);
     const key = String(tag);
     // .toUpperCase()
     // .replace(/\s/g, "");

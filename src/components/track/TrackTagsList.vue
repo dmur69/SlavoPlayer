@@ -105,6 +105,7 @@ export default {
         }
       });
     },
+
     // Toggles dropdown for adding new tags and performs other actions
     async handleTagDropDownClick() {
       this.showTagDropdown = !this.showTagDropdown;
@@ -115,7 +116,11 @@ export default {
       // Load global tag list only on first click
       if (!this.tagSearchIsActive && !this.allTags[0]) {
         const tagHandler = new TagHandler(); // Without params just handler with no meta
-        this.allTags = await tagHandler.get({ sortOnColumn: "displayName" }); // Without params gets all
+        this.allTags = await tagHandler
+          .get({ 
+            source: "tags",
+            sortOnColumn: "displayName" 
+          }); 
         console.log("Global tag list loaded:");
         this.allTags.forEach((tag) => {
           console.log(tag.displayName);
