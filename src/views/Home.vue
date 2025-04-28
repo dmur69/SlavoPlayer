@@ -4,7 +4,7 @@
     <section class="mb-8 py-20 text-white text-center relative">
       <div
         class="absolute inset-0 w-full h-full bg-cover introduction-bg"
-        style="background-image: url(assets/img/song-header.png)"
+        style="background-image: url('/assets/song-header.png')"
       />
       <div class="container mx-auto">
         <div class="text-white main-header-content">
@@ -48,7 +48,6 @@
 
 <script>
 import BookHandler from "@/handlerobj/book";
-// import { mapGetters } from "vuex";
 import AppBookToPlay from "../components/home/BookToPlay.vue";
 
 export default {
@@ -66,8 +65,8 @@ export default {
   async created() {
     let booksMetaArray = [];
     try {
-      const bookHandler = new BookHandler(); // Create just handler object
       console.log("Home1 - get books");
+      const bookHandler = new BookHandler(); // Create just handler object
       booksMetaArray = await bookHandler.get({
         source: "books",
         sortOnColumn: "title"
@@ -77,7 +76,6 @@ export default {
       booksMetaArray.forEach((bookMeta) => {
         this.booksArray.push(bookMeta);
         console.log("bookArrayItem added.");
-        // console.log(bookMeta);
       });
     } catch (error) {
       console.log(`Error while quering tracks from database: ${error.message}`);

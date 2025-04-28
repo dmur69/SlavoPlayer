@@ -12,18 +12,17 @@ let app;
 // Called at least once on first load
 auth.onAuthStateChanged(() => {
   if (!app) {
-    app = createApp(App);
+    // Plain way to disable logs
+    const consoleLog = true
+     if(!consoleLog) {
+       console.log = function() {} 
+     }
 
+    console.log("In main.js");
+    app = createApp(App);
     app.use(store);
     app.use(router);
     app.use(VeeValidatePlugin);
-
-    // Plain way to disable logs
-    const consoleLog = true
-    if(!consoleLog) {
-      console.log = function() {} 
-    }
-
     app.mount("#app");
   }
 });

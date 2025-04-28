@@ -67,12 +67,6 @@ input[type="file"] {
   animation: progress-bar-stripes 1s linear infinite;
 }
 
-.music-bg {
-  animation: slide 50s linear infinite;
-  will-change: background-position;
-  background-image: url(/public/assets/img/song-header.png);
-}
-
 @keyframes progress-bar-stripes {
   0% {
     background-position: 1rem 0;

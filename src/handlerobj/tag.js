@@ -1,6 +1,6 @@
 // TagHandler object
 // CRUD und helper methods for working with Tag objects
-import TagMapper from "@/datamappers/firebase/firestore/tags";
+import CollectionMapper from "@/datamappers/firebase/firestore/fsmapper";
 
 class TagHandler {
   constructor(tag) {
@@ -9,11 +9,10 @@ class TagHandler {
     this.sysTag = true; // has to be explicetely unset if needed on the track level
     this.isBookmarked = true; // has to be explicetely unset if needed on the track level
     this.position = 0; // has to be explicetely set if needed on the track level
-    this.tagMapper = new TagMapper(this.getMeta());
+    this.tagMapper = new CollectionMapper(this.getMeta());
   }
 
   // DisplayName should be unique for any tag
-  // eslint-disable-next-line class-methods-use-this
   generateKeyFromTitle(tag) {
     const key = String(tag);
     // .toUpperCase()
