@@ -2,6 +2,7 @@ import { createStore } from "vuex";
 import { Howl } from "howler";
 import helper from "@/includes/helper";
 import auth from "./modules/auth";
+import { useAudio } from '@/composables/useAudio'; // Importiere useAudio Composable
 
 export default createStore({
   modules: {
@@ -22,9 +23,83 @@ export default createStore({
       seek: 0 // Index of currentTrack in trackArray
     }
   },
+  getters: {
+    currentTrackPosition: state => {
+      let pos = 0;
+      if (state.currentTrack.sound.playing) {
+        pos = state.currentTrack.sound.seek();
+      }
+      return pos;
+    },
+    trackIsPlaying: state => {
+      let playing = false;
+      if (state.currentTrack.sound.playing) {
+        playing = state.currentTrack.sound.playing();
+      }
+      return playing;
+    },
+    trackIsLoading: state => state.currentTrack.isLoading,
+    getNextTrack: state => {
+      let track = state.currentTrack;
+      const nextIndex = state.currentPlaylist.seek + 1;
+      if (nextIndex < state.currentPlaylist.trackArray.length) {
+        track = state.currentPlaylist.trackArray[nextIndex];
+      }
+      return track;
+    },
+    getPrevTrack: state => {
+      let track = state.currentTrack;
+      const prevIndex = state.currentPlaylist.seek - 1;
+      if (prevIndex >= 0) {
+        track = state.currentPlaylist.trackArray[prevIndex];
+      }
+      return track;
+    }
+  },
   mutations: {
-    // For Track
-    changeCurrentTrack: (state, payload) => {
+    /////// For Track
+      // Neue Variante mit dem ausgelagerten HowlObject
+      changeCurrentTrack: (state, payload) => {
+        const { init, seek, sound } = useAudio(); // Hole die Funktionen aus useAudio
+    
+        // Track-Informationen setzen
+        state.currentTrack.meta = payload.track;
+        console.log("Current track changed/mutated from the composible howler object");
+    
+        // Initialisiere den neuen Track
+        init(payload.track.url);
+    
+        // Setze die Dauer des Tracks
+        state.currentTrack.duration = payload.track.length;
+    
+        // Wenn ein Tag vorhanden ist und es Bookmarked ist, setzen wir den Startpunkt
+        if (payload.currentTag && payload.currentTag.isBookmarked) {
+          const seekPosition = payload.currentTag.position;
+    
+          // Setze die Seek-Werte in den State (UI und Player)
+          state.currentTrack.seek = helper.formatSecToTimerValue(seekPosition);
+          state.currentTrack.seekPercentage = `${(seekPosition /
+            helper.formatTimerValueToSec(state.currentTrack.duration)) * 100}%`;
+    
+          // Setze den Startpunkt im Howl-Player
+          seek(seekPosition); // Mit der seek-Methode der Composable
+        }
+    
+        // Update den Playlist-Index für das aktuelle Track
+        const index = state.currentPlaylist.trackArray
+          ? state.currentPlaylist.trackArray.findIndex(
+              x => x.trackKey === state.currentTrack.meta.trackKey
+            )
+          : state.currentPlaylist.seek;
+    
+        if (index > 0) {
+          state.currentPlaylist.seek = index;
+        }
+    
+        console.log(`state.currentPlaylist.seek: ${state.currentPlaylist.seek}`);
+      },
+    // Alte variante mit Howl Object
+    changeCurrentTrackWithHowlObject: (state, payload) => {
       state.currentTrack.meta = payload.track;
       console.log("Current track changed/mutated");
       state.currentTrack.sound = new Howl({
@@ -81,44 +156,6 @@ export default createStore({
       state.currentPlaylist.trackArray = payload.trackArray;
     }
   },
-  getters: {
-    currentTrackPosition: state => {
-      let pos = 0;
-      if (state.currentTrack.sound.playing) {
-        pos = state.currentTrack.sound.seek();
-      }
-      return pos;
-    },
-    trackIsPlaying: state => {
-      let playing = false;
-      if (state.currentTrack.sound.playing) {
-        playing = state.currentTrack.sound.playing();
-      }
-      return playing;
-    },
-    trackIsLoading: state => state.currentTrack.isLoading,
-    getNextTrack: state => {
-      let track = state.currentTrack;
-      const nextIndex = state.currentPlaylist.seek + 1;
-      if (nextIndex < state.currentPlaylist.trackArray.length) {
-        track = state.currentPlaylist.trackArray[nextIndex];
-      }
-      return track;
-    },
-    getPrevTrack: state => {
-      let track = state.currentTrack;
-      const prevIndex = state.currentPlaylist.seek - 1;
-      if (prevIndex >= 0) {
-        track = state.currentPlaylist.trackArray[prevIndex];
-      }
-      return track;
-    }
-  },
-  // Action is part of Flux pattern (Facebook alternative to MVC)
-  // https://ru.vuejs.org/v2/guide/state-management.html
-  // https://madasamy.medium.com/flux-vs-mvc-design-pattern-de134dfaa12b
-  // https://dev.to/durutheguru/implementing-the-flux-architecture-pattern-in-vuejs-57gp
-  // Action is not a model, but "action based business logic"
   actions: {
     // ///////////// TRACK Play Management
     // >>>>>> The function where with Howl-object sound.play()
@@ -163,7 +200,7 @@ export default createStore({
       dispatch("playCurrentTrack");
       console.log("Start prev track...");
     },
-    togglePlaying({ dispatch, getters }) {
+    togglePlaying({ dispatch, getters }) { 
       // Check if current song is already playing
       if (getters.trackIsPlaying) {
         dispatch("pauseCurrentTrack");
